@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="tr"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;Uçuş Kuralları Rehberi&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Tailwind CSS (V3 - En Kararlı Versiyon) --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- Google Fonts --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.dark { background-color: #0a0a0a; color: #f5f5f5; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>::-webkit-scrollbar { width: 6px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>::-webkit-scrollbar-track { background: transparent; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.dark ::-webkit-scrollbar-thumb { background: #334155; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>#root { min-height: 100vh; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Animasyonlar için basit CSS */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.modal-enter { animation: fadeIn 0.2s ease-out; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>tailwind.config = {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>darkMode: 'class',</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>theme: { extend: { colors: { dark: '#0a0a0a' } } }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body class="bg-[#f5f5f5] transition-colors duration-300"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="root"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center justify-center h-screen"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p class="text-gray-400 animate-pulse"&gt;Uygulama Yükleniyor...&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- React ve Babel (Tarayıcıda Çalışması İçin) --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/react@18/umd/react.production.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/lucide@latest"&gt;&lt;/script&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script type="text/babel"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const { useState, useMemo, useEffect } = React;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// İkon Bileşeni (Hatasız Versiyon)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const Icon = ({ name, className }) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const [svg, setSvg] = useState('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>useEffect(() =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (window.lucide) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>const icon = window.lucide.icons[name];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>if (icon) setSvg(icon.toSvg({ class: className }));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}, [name, className]);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>return &lt;span className="inline-flex" dangerouslySetInnerHTML={{ __html: svg }} /&gt;;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// TÜM 52 KURAL (Eksiksiz)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const flightRules = [</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 1, title: "THY ECO FLY (U/W/P/V/L/T)", details: ["Değişiklik yapılamaz.", "İadeye izin verilmez.", "Koltuk seçimi ücretli.", "Bagaj: 15KG"] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 2, title: "THY ECO FLY (Q)", details: ["12 saat+ değişim: 1100 TL cezalı.", "1-12 saat değişim: 1350 TL cezalı.", "İadeye izin verilmez.", "Bagaj: 15KG"] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 3, title: "THY ECO FLY (E)", details: ["12 saat+ değişim: 1100 TL.", "12 saat+ iade: 1450 TL.", "12 saatten az kala iade yok."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 4, title: "THY ECO FLY (O/S/H/A/M/B)", details: ["12 saat+ değişim: 1100 TL.", "12 saat+ iade: 1450 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 5, title: "THY EXTRA FLY (P/V)", details: ["12 saat+ değişim: 350 TL.", "1-12 saat değişim: 600 TL.", "12 saat+ iade: 650 TL.", "Bagaj: 20KG"] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 6, title: "THY EXTRA FLY (L/T/Q/E/O/S/H/A/M/B)", details: ["12 saat+ değişim: 350 TL.", "1-12 saat değişim: 600 TL.", "12 saat+ iade: 650 TL.", "1-12 saat iade: 950 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 7, title: "THY PRIME FLY (V/L/T/Q/E/O/S/H/A/M/B)", details: ["1 saat+ cezasız değişim.", "12 saat+ cezasız iade.", "1-12 saat iade: 850 TL.", "Bagaj: 25KG"] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 8, title: "THY BUSINESS KURALLAR", details: ["12 saat+ cezasız değişim.", "1-12 saat değişim: 3500 TL.", "12 saat+ cezasız iade.", "1-12 saat iade: 3500 TL.", "Bagaj: 30KG"] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 9, title: "THY ERCAN ECO FLY (U/W/P/V)", details: ["Değişiklik yapılamaz.", "İadeye izin verilmez."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 10, title: "THY ERCAN ECO FLY (L)", details: ["12 saat+ değişim: 1750 TL.", "1-12 saat değişim: 1950 TL.", "İade yok."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 11, title: "THY ERCAN ECO FLY (T/Q/E/O/S/H/A/M/B)", details: ["12 saat+ değişim: 1750 TL.", "12 saat+ iade: 1950 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 12, title: "THY ERCAN EXTRA FLY (U/W)", details: ["12 saat+ değişim: 700 TL.", "12 saat+ iade: 900 TL.", "1-12 saat iade: 1300 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 13, title: "THY ERCAN EXTRA FLY (P/V/L/Q/E/O/S/H/A/M/B)", details: ["12 saat+ değişim: 700 TL.", "12 saat+ iade: 900 TL.", "1-12 saat iade: 1300 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 14, title: "THY ERCAN PRIME FLY", details: ["1 saat+ cezasız değişim.", "12 saat+ cezasız iade.", "1-12 saat iade: 1250 TL.", "Bagaj: 25KG"] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 15, title: "THY ERCAN BUSINESS", details: ["12 saat+ cezasız değişim.", "1-12 saat değişim: 5000 TL.", "12 saat+ cezasız iade.", "1-12 saat iade: 4750 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 16, title: "AJET BASIC (V/P/W/U/5/6/7/8/9)", details: ["Değişiklik yapılamaz.", "İadeye izin verilmez.", "Bagaj: 15KG"] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 17, title: "AJET BASIC (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", details: ["1-12 saat+ değişim: 950 TL.", "12 saat+ iade: 1100 TL.", "12 saatten az iade yok."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 18, title: "AJET FLEX (V/P/W/U/5/6/7/8/9)", details: ["1-12 saat değişim: 600 TL.", "12 saat+ değişim: 400 TL.", "İadeye izin verilmez.", "Bagaj: 20KG"] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 19, title: "AJET FLEX (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", details: ["1-12 saat değişim: 950 TL.", "12 saat+ değişim: 750 TL.", "1-12 saat iade: 1100 TL.", "12 saat+ iade: 900 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 20, title: "AJET PREMIUM İÇ HAT (V/P/W/U/5/6/7/8/9)", details: ["1 saat+ cezasız değişim.", "1-12 saat iade: 600 TL.", "12 saat+ cezasız iade."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 21, title: "AJET PREMIUM İÇ HAT (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", details: ["1 saat+ cezasız değişim.", "1-12 saat iade: 750 TL.", "12 saat+ cezasız iade."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 22, title: "AJET BASIC (ERCAN)", details: ["1-12 saat değişim: 755 TL.", "12 saat+ değişim: 655 TL.", "12 saat+ iade: 985 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 23, title: "AJET ECOJET (ERCAN)", details: ["1-12 saat değişim: 755 TL.", "12 saat+ değişim: 655 TL.", "12 saat+ iade: 985 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 24, title: "AJET FLEX ERCAN (1/2/3/4/5/6/7/8/9/U/W/P)", details: ["1-12 saat değişim: 500 TL.", "12 saat+ değişim: 400 TL.", "İade yok."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 25, title: "AJET FLEX ERCAN (V/L/T/G/Q/O/Y/E/B/M/A/O/S/H/Y)", details: ["1-12 saat değişim: 500 TL.", "12 saat+ değişim: 400 TL.", "1-12 saat iade: 720 TL.", "12 saat+ iade: 500 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 26, title: "AJET PREMIUM (ERCAN)", details: ["Cezasız değişim.", "1-12 saat iade: 655 TL.", "12 saat+ iade: 150 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 27, title: "PEGASUS İÇ HAT (G/P/U/T/Z/N/X/S/N)", details: ["2 saat+ değişim: 600 TL.", "İadeye izin verilmez."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 28, title: "PEGASUS İÇ HAT (K/H/M/L/B/Y)", details: ["2 saat+ değişim: 950 TL.", "12 saat+ iade: 1100 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 29, title: "SUNEXPRESS SUNVALUE (İÇ HAT)", details: ["24 saat+ değişim: 500 TL.", "24 saatten az değişim: 600 TL.", "12 saat+ iade: 900 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 30, title: "SUNEXPRESS SUNECO+ (İÇ HAT)", details: ["2 saat+ değişim ücretsiz.", "2 saatten az değişim: 600 TL.", "6 saat+ iade ücretsiz.", "6 saatten az iade: 900 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 31, title: "SUNEXPRESS SUNCOMFORT (İÇ HAT)", details: ["24 saat+ değişim: 500 TL.", "24 saatten az değişim: 600 TL.", "12 saat+ iade: 900 TL."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 32, title: "PEGASUS KKTC (U/G/P/T/Z/V/X/S)", details: ["2 saat+ değişim: 25 EUR.", "İade yok."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 33, title: "PEGASUS KKTC (N/K)", details: ["2 saat+ değişim: 40 EUR.", "12 saat+ iade: 40 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 34, title: "PEGASUS KKTC (H)", details: ["2 saat+ değişim: 50 EUR.", "12 saat+ iade: 50 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 35, title: "PEGASUS KKTC (M)", details: ["2 saat+ değişim: 60 EUR.", "12 saat+ iade: 60 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 36, title: "PEGASUS KKTC (L)", details: ["2 saat+ değişim: 70 EUR.", "12 saat+ iade: 70 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 37, title: "PEGASUS KKTC (B)", details: ["2 saat+ değişim: 80 EUR.", "12 saat+ iade: 80 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 38, title: "PEGASUS KKTC (Y)", details: ["2 saat+ değişim: 90 EUR.", "12 saat+ iade: 90 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 39, title: "AJET BASIC (DIŞ HAT)", details: ["Uçuş öncesi değişim: 75 USD/EUR.", "Uçuş sonrası değişim: 150 USD/EUR.", "İade yok."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 40, title: "AJET EKOJET (DIŞ HAT)", details: ["Uçuş öncesi değişim: 55 USD.", "Uçuş sonrası değişim: 130 USD.", "İade yok."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 41, title: "AJET FLEX (DIŞ HAT)", details: ["Uçuş öncesi değişim: 35 USD.", "Uçuş sonrası değişim: 90 USD.", "2 saat+ iade: 95 USD."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 42, title: "AJET PREMIUM (DIŞ HAT)", details: ["Uçuş öncesi cezasız değişim.", "Uçuş sonrası değişim: 55 USD.", "İade cezası yok."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 43, title: "PEGASUS DIŞ HAT (G/P)", details: ["Değişiklik yapılamaz.", "İadeye izin verilmez."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 44, title: "PEGASUS DIŞ HAT (U)", details: ["2 saat+ değişim: 40 EUR.", "İade yok."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 45, title: "PEGASUS DIŞ HAT (T)", details: ["2 saat+ değişim: 55 EUR.", "İade yok."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 46, title: "PEGASUS DIŞ HAT (Z/V/X/S)", details: ["2 saat+ değişim: 80 EUR.", "12 saat+ iade: 95 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 47, title: "PEGASUS DIŞ HAT (N/K)", details: ["2 saat+ değişim: 95 EUR.", "12 saat+ iade: 110 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 48, title: "PEGASUS DIŞ HAT (H)", details: ["2 saat+ değişim: 110 EUR.", "12 saat+ iade: 140 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 49, title: "PEGASUS DIŞ HAT (M)", details: ["2 saat+ değişim: 130 EUR.", "12 saat+ iade: 165 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 50, title: "PEGASUS DIŞ HAT (L)", details: ["2 saat+ değişim: 145 EUR.", "12 saat+ iade: 165 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 51, title: "PEGASUS DIŞ HAT (B)", details: ["2 saat+ değişim: 165 EUR.", "12 saat+ iade: 190 EUR."] },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ id: 52, title: "PEGASUS DIŞ HAT (Y)", details: ["2 saat+ değişim: 230 EUR.", "12 saat+ iade: 265 EUR."] }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function App() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const [searchTerm, setSearchTerm] = useState('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const [selectedRule, setSelectedRule] = useState(null);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const [isDarkMode, setIsDarkMode] = useState(false);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>useEffect(() =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const root = window.document.documentElement;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (isDarkMode) root.classList.add('dark');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>else root.classList.remove('dark');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}, [isDarkMode]);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const filteredRules = useMemo(() =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>return flightRules.filter(rule =&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>rule.title.toLowerCase().includes(searchTerm.toLowerCase())</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}, [searchTerm]);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const getAirlineColor = (title) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (title.includes('TÜRK HAVA YOLLARI')) return 'border-red-200 text-red-700 bg-red-50 dark:bg-red-950/20';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (title.includes('AJET')) return 'border-blue-200 text-blue-700 bg-blue-50 dark:bg-blue-950/20';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (title.includes('PEGASUS')) return 'border-yellow-300 text-yellow-800 bg-yellow-50 dark:bg-yellow-950/20';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>return 'border-orange-200 text-orange-700 bg-orange-50 dark:bg-orange-950/20';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const getAirlineName = (title) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (title.includes('TÜRK HAVA YOLLARI')) return 'THY';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (title.includes('AJET')) return 'AJet';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (title.includes('PEGASUS')) return 'Pegasus';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>return 'SunEx';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>return (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="min-h-screen bg-[#f5f5f5] dark:bg-dark text-[#1a1a1a] dark:text-[#f5f5f5] transition-colors duration-300"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;header className="sticky top-0 z-30 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-black/5 dark:border-white/5 px-4 py-4 md:px-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div className="max-w-5xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div className="flex items-center justify-between w-full md:w-auto"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div className="flex items-center gap-3"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;div className="bg-blue-600 p-2 rounded-xl"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;Icon name="plane" className="w-6 h-6 text-white" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;h1 className="text-xl font-bold"&gt;Uçuş Kuralları&lt;/h1&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;p className="text-[10px] text-gray-500 uppercase tracking-widest"&gt;Bilet Rehberi&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;button onClick={() =&gt; setIsDarkMode(!isDarkMode)} className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 md:hidden"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;Icon name={isDarkMode ? "sun" : "moon"} className="w-5 h-5" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div className="flex items-center gap-3"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div className="relative flex-1 md:flex-none"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;Icon name="search" className="w-4 h-4" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;input</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>type="text"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>placeholder="Ara..."</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>className="w-full md:w-80 bg-gray-100 dark:bg-gray-800 rounded-2xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-blue-500/20"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>value={searchTerm}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>onChange={(e) =&gt; setSearchTerm(e.target.value)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;button onClick={() =&gt; setIsDarkMode(!isDarkMode)} className="hidden md:block p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;Icon name={isDarkMode ? "sun" : "moon"} className="w-5 h-5" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/header&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;main className="max-w-5xl mx-auto px-4 py-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div className="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-black/5 shadow-sm"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div className="flex items-center gap-3 mb-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;Icon name="shield-check" className="w-5 h-5 text-green-600" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;span className="text-sm font-semibold text-gray-400"&gt;Güncel&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;p className="text-2xl font-light"&gt;52 Farklı Sınıf&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div className="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-black/5 shadow-sm"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div className="flex items-center gap-3 mb-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;Icon name="clock" className="w-5 h-5 text-blue-600" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;span className="text-sm font-semibold text-gray-400"&gt;Esnek&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;p className="text-2xl font-light"&gt;Zaman Bazlı&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div className="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-black/5 shadow-sm"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div className="flex items-center gap-3 mb-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;Icon name="credit-card" className="w-5 h-5 text-purple-600" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;span className="text-sm font-semibold text-gray-400"&gt;Net&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;p className="text-2xl font-light"&gt;İade &amp; Değişim&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div className="space-y-3"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>{filteredRules.map((rule) =&gt; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;button</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>key={rule.id}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>onClick={() =&gt; setSelectedRule(rule)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>className="w-full bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 border border-black/5 rounded-2xl p-4 flex items-center justify-between transition-all group text-left"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;div className="flex items-center gap-4"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;div className={`w-12 h-12 rounded-xl border flex items-center justify-center font-bold text-[10px] text-center ${getAirlineColor(rule.title)}`}&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>{getAirlineName(rule.title)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;div className="flex items-center gap-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                                </span>&lt;span className="text-[10px] font-bold text-gray-400"&gt;#{rule.id}&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                                </span>&lt;span className="text-[10px] font-bold text-blue-500 uppercase"&gt;{getAirlineName(rule.title)}&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;h3 className="font-medium text-sm md:text-base"&gt;{rule.title}&lt;/h3&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;Icon name="chevron-right" className="w-5 h-5 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>))}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/main&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>{selectedRule &amp;&amp; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div className="fixed inset-0 z-50 flex items-center justify-center p-4"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div onClick={() =&gt; setSelectedRule(null)} className="absolute inset-0 bg-black/40 backdrop-blur-sm" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div className="modal-enter relative bg-white dark:bg-gray-900 w-full max-w-2xl rounded-[32px] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div className="p-6 md:p-10 border-b border-gray-100 dark:border-white/5"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;div className="flex justify-between items-start"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;div className="flex items-center gap-3"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;div className={`w-14 h-14 rounded-2xl border flex items-center justify-center font-bold text-[11px] text-center ${getAirlineColor(selectedRule.title)}`}&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                                </span>{getAirlineName(selectedRule.title)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                                </span>&lt;span className="text-[10px] font-bold text-blue-500 uppercase"&gt;Kural Detayı #{selectedRule.id}&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                                </span>&lt;h2 className="text-xl md:text-2xl font-bold leading-tight"&gt;{selectedRule.title}&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;button onClick={() =&gt; setSelectedRule(null)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;Icon name="x" className="w-6 h-6 text-gray-400" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div className="flex-1 overflow-y-auto p-6 md:p-10"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;div className="space-y-4"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>{selectedRule.details.map((detail, i) =&gt; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;div key={i} className="flex items-start gap-4 p-4 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border border-black/5"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                                </span>&lt;div className="mt-2 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                                </span>&lt;p className="text-sm md:text-base font-medium"&gt;{detail}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                        </span>))}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div className="p-6 md:p-10 border-t border-gray-100 dark:border-white/5"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;button onClick={() =&gt; setSelectedRule(null)} className="w-full bg-black dark:bg-white text-white dark:text-black py-4 rounded-2xl font-bold"&gt;Kapat&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const root = ReactDOM.createRoot(document.getElementById('root'));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>root.render(&lt;App /&gt;);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
