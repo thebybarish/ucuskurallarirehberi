@@ -112,44 +112,16 @@
     </div>
 
     <script>
-        // ÇEVİRİLER
         const translations = {
-            tr: {
-                title: "Uçuş Kuralları",
-                subtitle: "Bilet Rehberi",
-                search: "Havayolu veya kural ara...",
-                stat1: "Güncel Veri",
-                stat1Val: "52 Farklı Sınıf",
-                stat2: "Zaman Bazlı",
-                stat2Val: "Esnek Kurallar",
-                stat3: "İade & Değişim",
-                stat3Val: "Net Ücretler",
-                close: "Kapat",
-                detail: "Kural Detayı",
-                toast: "Kural kopyalandı!"
-            },
-            en: {
-                title: "Flight Rules",
-                subtitle: "Ticket Guide",
-                search: "Search airline or rule...",
-                stat1: "Current Data",
-                stat1Val: "52 Different Classes",
-                stat2: "Time Based",
-                stat2Val: "Flexible Rules",
-                stat3: "Refund & Change",
-                stat3Val: "Net Fees",
-                close: "Close",
-                detail: "Rule Detail",
-                toast: "Rule copied!"
-            }
+            tr: { title: "Uçuş Kuralları", subtitle: "Bilet Rehberi", search: "Havayolu veya kural ara...", stat1: "Güncel Veri", stat1Val: "52 Farklı Sınıf", stat2: "Zaman Bazlı", stat2Val: "Esnek Kurallar", stat3: "İade & Değişim", stat3Val: "Net Ücretler", close: "Kapat", detail: "Kural Detayı", toast: "Kural kopyalandı!" },
+            en: { title: "Flight Rules", subtitle: "Ticket Guide", search: "Search airline or rule...", stat1: "Current Data", stat1Val: "52 Different Classes", stat2: "Time Based", stat2Val: "Flexible Rules", stat3: "Refund & Change", stat3Val: "Net Fees", close: "Close", detail: "Rule Detail", toast: "Rule copied!" }
         };
 
-        // 52 KURAL VERİSİ (TR ve EN)
         const flightRules = [
-            { id: 1, tr: { title: "THY ECO FLY (U/W/P/V/L/T)", details: ["*Değişiklik yapılamaz.", "**İadeye izin verilmez.", "***Koltuk seçimi ücretli.", "***Bagaj hakkı 15KG."] }, en: { title: "THY ECO FLY (U/W/P/V/L/T)", details: ["*No changes allowed.", "**No refunds allowed.", "***Paid seat selection.", "***Baggage allowance 15KG."] } },
-            { id: 2, tr: { title: "THY ECO FLY (Q)", details: ["*12 saat+ değişim: 1100 TL cezalı.", "*1-12 saat değişim: 1350 TL cezalı.", "** İadeye izin verilmez.", "***Bagaj hakkı 15KG."] }, en: { title: "THY ECO FLY (Q)", details: ["*12h+ change: 1100 TL penalty.", "*1-12h change: 1350 TL penalty.", "** No refunds allowed.", "***Baggage allowance 15KG."] } },
-            { id: 3, tr: { title: "THY ECO FLY (E)", details: ["*12 saat+ değişim: 1100 TL.", "**12 saat+ iade: 1450 TL.", "**12 saatten az iade yok."] }, en: { title: "THY ECO FLY (E)", details: ["*12h+ change: 1100 TL.", "**12h+ refund: 1450 TL penalty.", "**No refund less than 12h."] } },
-            { id: 4, tr: { title: "THY ECO FLY (O/S/H/A/M/B)", details: ["*12 saat+ değişim: 1100 TL.", "**12 saat+ iade: 1450 TL."] }, en: { title: "THY ECO FLY (O/S/H/A/M/B)", details: ["*12h+ change: 1100 TL.", "**12h+ refund: 1450 TL."] } },
+            { id: 1, tr: { title: "THY ECO FLY (U/W/P/V/L/T)", details: ["*Değişiklik yapılamaz.", "**İadeye izin verilmez.", "***Koltuk seçimi ücretli yapılabilir.", "***Bagaj hakkı 15KG."] }, en: { title: "THY ECO FLY (U/W/P/V/L/T)", details: ["*No changes allowed.", "**No refunds allowed.", "***Paid seat selection.", "***Baggage allowance 15KG."] } },
+            { id: 2, tr: { title: "THY ECO FLY (Q)", details: ["*12 saat+ değişim: 1100 TL cezalı.", "*1-12 saat değişim: 1350 TL cezalı.", "*1 saat kala değişim yok.", "**İadeye izin verilmez.", "***Bagaj hakkı 15KG."] }, en: { title: "THY ECO FLY (Q)", details: ["*12h+ change: 1100 TL penalty.", "*1-12h change: 1350 TL penalty.", "*No changes within 1 hour.", "**No refunds allowed.", "***Baggage allowance 15KG."] } },
+            { id: 3, tr: { title: "THY ECO FLY (E)", details: ["*12 saat+ değişim: 1100 TL.", "*1-12 saat değişim: 1350 TL.", "**12 saat+ iade: 1450 TL.", "**12 saatten az iade yok."] }, en: { title: "THY ECO FLY (E)", details: ["*12h+ change: 1100 TL.", "*1-12h change: 1350 TL.", "**12h+ refund: 1450 TL penalty.", "**No refund within 12 hours."] } },
+            { id: 4, tr: { title: "THY ECO FLY (O/S/H/A/M/B)", details: ["*12 saat+ değişim: 1100 TL.", "*1-12 saat değişim: 1350 TL.", "**12 saat+ iade: 1450 TL."] }, en: { title: "THY ECO FLY (O/S/H/A/M/B)", details: ["*12h+ change: 1100 TL.", "*1-12h change: 1350 TL.", "**12h+ refund: 1450 TL."] } },
             { id: 5, tr: { title: "THY EXTRA FLY (P/V)", details: ["*12 saat+ değişim: 350 TL.", "*1-12 saat değişim: 600 TL.", "**12 saat+ iade: 650 TL.", "***Bagaj hakkı 20KG."] }, en: { title: "THY EXTRA FLY (P/V)", details: ["*12h+ change: 350 TL.", "*1-12h change: 600 TL.", "**12h+ refund: 650 TL.", "***Baggage allowance 20KG."] } },
             { id: 6, tr: { title: "THY EXTRA FLY (L/T/Q/E/O/S/H/A/M/B)", details: ["*12 saat+ değişim: 350 TL.", "*1-12 saat değişim: 600 TL.", "**12 saat+ iade: 650 TL.", "**1-12 saat iade: 950 TL."] }, en: { title: "THY EXTRA FLY (L/T/Q/E/O/S/H/A/M/B)", details: ["*12h+ change: 350 TL.", "*1-12h change: 600 TL.", "**12h+ refund: 650 TL.", "**1-12h refund: 950 TL."] } },
             { id: 7, tr: { title: "THY PRIME FLY", details: ["*1 saat+ cezasız değişim.", "**12 saat+ cezasız iade.", "**1-12 saat iade: 850 TL.", "***Bagaj hakkı 25KG."] }, en: { title: "THY PRIME FLY", details: ["*1h+ free change.", "**12h+ free refund.", "**1-12h refund: 850 TL.", "***Baggage allowance 25KG."] } },
