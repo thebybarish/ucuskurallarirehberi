@@ -3,289 +3,685 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uçuş Kuralları Rehberi / Flight Rules Guide</title>
+    <title>Uçuş Kuralları Rehberi</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; margin: 0; }
-        * { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
-        .airline-card { cursor: pointer; transition: transform 0.2s ease; }
-        .airline-card:hover { transform: translateY(-2px); }
-        #modal { display: none; }
-        #modal.active { display: flex; }
-        .modal-content { animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .copy-toast { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100; }
-        .copy-toast.active { display: block; animation: fadeInOut 2s forwards; }
-        @keyframes fadeInOut { 0% { opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease; }
+        .dark { background-color: #0a0a0a; color: #f5f5f5; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        /* Sağ tık ve seçim engelleme (Temel koruma) */
+        .no-select { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
     </style>
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { extend: { colors: { darkBg: '#0a0a0a', darkCard: '#151515' } } }
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0a0a0a',
+                            card: '#121212',
+                            border: 'rgba(255,255,255,0.1)'
+                        }
+                    }
+                }
+            }
         }
     </script>
 </head>
-<body class="bg-[#f5f5f5] dark:bg-darkBg text-[#1a1a1a] dark:text-[#f5f5f5]">
-    <!-- Header -->
-    <header class="sticky top-0 z-30 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-black/5 dark:border-white/10 px-4 py-4 md:px-8">
-        <div class="max-w-5xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div class="flex items-center justify-between w-full md:w-auto">
-                <div class="flex items-center gap-3">
-                    <div class="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-200 dark:shadow-blue-900/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold" id="ui-title">Uçuş Kuralları</h1>
-                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-widest" id="ui-subtitle">Bilet Rehberi</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2 md:hidden">
-                    <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 font-bold text-xs" id="langBtnMobile">EN</button>
-                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800" id="themeBtnMobile">🌙</button>
-                </div>
-            </div>
-            <div class="flex items-center gap-3">
-                <input type="text" id="searchInput" oninput="renderRules()" placeholder="Ara..." class="w-full md:w-80 bg-gray-100 dark:bg-gray-800 rounded-2xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 dark:text-white">
-                <button onclick="toggleLanguage()" class="hidden md:block px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 font-bold text-sm hover:bg-gray-200 dark:hover:bg-gray-700" id="langBtn">EN</button>
-                <button onclick="toggleDarkMode()" class="hidden md:block p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800" id="themeBtn">🌙</button>
-            </div>
-        </div>
-    </header>
+<body class="no-select" oncontextmenu="return false;">
+    <div id="root"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-8">
-        <!-- Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm">
-                <div class="flex items-center gap-3 mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                    <span class="text-sm font-semibold text-gray-400" id="stat-1-label">Güncel Veri</span>
-                </div>
-                <p class="text-2xl font-light" id="stat-1-val">52 Farklı Sınıf</p>
-            </div>
-            <div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm">
-                <div class="flex items-center gap-3 mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <span class="text-sm font-semibold text-gray-400" id="stat-2-label">Zaman Bazlı</span>
-                </div>
-                <p class="text-2xl font-light" id="stat-2-val">Esnek Kurallar</p>
-            </div>
-            <div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm">
-                <div class="flex items-center gap-3 mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-600"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                    <span class="text-sm font-semibold text-gray-400" id="stat-3-label">İade & Değişim</span>
-                </div>
-                <p class="text-2xl font-light" id="stat-3-val">Net Ücretler</p>
-            </div>
-        </div>
+    <script type="text/babel">
+        const { useState, useMemo, useEffect } = React;
+        const { motion, AnimatePresence } = window.Motion;
 
-        <!-- Rules List -->
-        <div id="rulesList" class="space-y-3"></div>
-    </main>
-
-    <!-- Modal -->
-    <div id="modal" class="fixed inset-0 z-50 items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-        <div class="modal-content relative bg-white dark:bg-darkCard w-full max-w-2xl rounded-[32px] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden border border-black/5 dark:border-white/10">
-            <div class="p-6 md:p-10 border-b border-gray-100 dark:border-white/5">
-                <div class="flex justify-between items-start">
-                    <div id="modalHeaderContent"></div>
-                    <div class="flex items-center gap-2">
-                        <button id="copyBtn" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all group" title="Kopyala">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 group-hover:text-blue-500"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                        </button>
-                        <button onclick="closeModal()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="flex-1 overflow-y-auto p-6 md:p-10" id="modalBody"></div>
-            <div class="p-6 md:p-10 border-t border-gray-100 dark:border-white/5">
-                <button onclick="closeModal()" class="w-full bg-black dark:bg-white text-white dark:text-black py-4 rounded-2xl font-bold" id="modalCloseBtn">Kapat</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div id="copyToast" class="copy-toast bg-green-500 text-white px-6 py-3 rounded-2xl font-bold shadow-xl">
-        Kopyalandı! / Copied!
-    </div>
-
-    <script>
-        const translations = {
-            tr: { title: "Uçuş Kuralları", subtitle: "Bilet Rehberi", search: "Havayolu veya kural ara...", stat1: "Güncel Veri", stat1Val: "52 Farklı Sınıf", stat2: "Zaman Bazlı", stat2Val: "Esnek Kurallar", stat3: "İade & Değişim", stat3Val: "Net Ücretler", close: "Kapat", detail: "Kural Detayı", toast: "Kural kopyalandı!" },
-            en: { title: "Flight Rules", subtitle: "Ticket Guide", search: "Search airline or rule...", stat1: "Current Data", stat1Val: "52 Different Classes", stat2: "Time Based", stat2Val: "Flexible Rules", stat3: "Refund & Change", stat3Val: "Net Fees", close: "Close", detail: "Rule Detail", toast: "Rule copied!" }
-        };
-
+        // --- DATA ---
         const flightRules = [
-            { id: 1, tr: { title: "THY ECO FLY (U/W/P/V/L/T)", details: ["*Değişiklik yapılamaz.", "**İadeye izin verilmez.", "***Koltuk seçimi ücretli yapılabilir.", "***Bagaj hakkı 15KG."] }, en: { title: "THY ECO FLY (U/W/P/V/L/T)", details: ["*No changes allowed.", "**No refunds allowed.", "***Paid seat selection.", "***Baggage allowance 15KG."] } },
-            { id: 2, tr: { title: "THY ECO FLY (Q)", details: ["*12 saat+ değişim: 1100 TL cezalı.", "*1-12 saat değişim: 1350 TL cezalı.", "*1 saat kala değişim yok.", "**İadeye izin verilmez.", "***Bagaj hakkı 15KG."] }, en: { title: "THY ECO FLY (Q)", details: ["*12h+ change: 1100 TL penalty.", "*1-12h change: 1350 TL penalty.", "*No changes within 1 hour.", "**No refunds allowed.", "***Baggage allowance 15KG."] } },
-            { id: 3, tr: { title: "THY ECO FLY (E)", details: ["*12 saat+ değişim: 1100 TL.", "*1-12 saat değişim: 1350 TL.", "**12 saat+ iade: 1450 TL.", "**12 saatten az iade yok."] }, en: { title: "THY ECO FLY (E)", details: ["*12h+ change: 1100 TL.", "*1-12h change: 1350 TL.", "**12h+ refund: 1450 TL penalty.", "**No refund within 12 hours."] } },
-            { id: 4, tr: { title: "THY ECO FLY (O/S/H/A/M/B)", details: ["*12 saat+ değişim: 1100 TL.", "*1-12 saat değişim: 1350 TL.", "**12 saat+ iade: 1450 TL."] }, en: { title: "THY ECO FLY (O/S/H/A/M/B)", details: ["*12h+ change: 1100 TL.", "*1-12h change: 1350 TL.", "**12h+ refund: 1450 TL."] } },
-            { id: 5, tr: { title: "THY EXTRA FLY (P/V)", details: ["*12 saat+ değişim: 350 TL.", "*1-12 saat değişim: 600 TL.", "**12 saat+ iade: 650 TL.", "***Bagaj hakkı 20KG."] }, en: { title: "THY EXTRA FLY (P/V)", details: ["*12h+ change: 350 TL.", "*1-12h change: 600 TL.", "**12h+ refund: 650 TL.", "***Baggage allowance 20KG."] } },
-            { id: 6, tr: { title: "THY EXTRA FLY (L/T/Q/E/O/S/H/A/M/B)", details: ["*12 saat+ değişim: 350 TL.", "*1-12 saat değişim: 600 TL.", "**12 saat+ iade: 650 TL.", "**1-12 saat iade: 950 TL."] }, en: { title: "THY EXTRA FLY (L/T/Q/E/O/S/H/A/M/B)", details: ["*12h+ change: 350 TL.", "*1-12h change: 600 TL.", "**12h+ refund: 650 TL.", "**1-12h refund: 950 TL."] } },
-            { id: 7, tr: { title: "THY PRIME FLY", details: ["*1 saat+ cezasız değişim.", "**12 saat+ cezasız iade.", "**1-12 saat iade: 850 TL.", "***Bagaj hakkı 25KG."] }, en: { title: "THY PRIME FLY", details: ["*1h+ free change.", "**12h+ free refund.", "**1-12h refund: 850 TL.", "***Baggage allowance 25KG."] } },
-            { id: 8, tr: { title: "THY BUSINESS", details: ["*12 saat+ cezasız değişim.", "*1-12 saat değişim: 3500 TL.", "**12 saat+ cezasız iade.", "**1-12 saat iade: 3500 TL."] }, en: { title: "THY BUSINESS", details: ["*12h+ free change.", "*1-12h change: 3500 TL.", "**12h+ free refund.", "**1-12h refund: 3500 TL."] } },
-            { id: 9, tr: { title: "THY ERCAN ECO FLY (U/W/P/V)", details: ["Değişiklik yapılamaz.", "İadeye izin verilmez."] }, en: { title: "THY ERCAN ECO FLY (U/W/P/V)", details: ["No changes allowed.", "No refunds allowed."] } },
-            { id: 10, tr: { title: "THY ERCAN ECO FLY (L)", details: ["*12 saat+ değişim: 1750 TL.", "*1-12 saat değişim: 1950 TL.", "İade yok."] }, en: { title: "THY ERCAN ECO FLY (L)", details: ["*12h+ change: 1750 TL.", "*1-12h change: 1950 TL.", "No refund."] } },
-            { id: 11, tr: { title: "THY ERCAN ECO FLY (T/Q/E/O/S/H/A/M/B)", details: ["*12 saat+ değişim: 1750 TL.", "**12 saat+ iade: 1950 TL."] }, en: { title: "THY ERCAN ECO FLY (T/Q/E/O/S/H/A/M/B)", details: ["*12h+ change: 1750 TL.", "**12h+ refund: 1950 TL."] } },
-            { id: 12, tr: { title: "THY ERCAN EXTRA FLY (U/W)", details: ["*12 saat+ değişim: 700 TL.", "**12 saat+ iade: 900 TL.", "**1-12 saat iade: 1300 TL."] }, en: { title: "THY ERCAN EXTRA FLY (U/W)", details: ["*12h+ change: 700 TL.", "**12h+ refund: 900 TL.", "**1-12h refund: 1300 TL."] } },
-            { id: 13, tr: { title: "THY ERCAN EXTRA FLY (P/V/L/Q/E/O/S/H/A/M/B)", details: ["*12 saat+ değişim: 700 TL.", "**12 saat+ iade: 900 TL.", "**1-12 saat iade: 1300 TL."] }, en: { title: "THY ERCAN EXTRA FLY (P/V/L/Q/E/O/S/H/A/M/B)", details: ["*12h+ change: 700 TL.", "**12h+ refund: 900 TL.", "**1-12h refund: 1300 TL."] } },
-            { id: 14, tr: { title: "THY ERCAN PRIME FLY", details: ["*1 saat+ cezasız değişim.", "**12 saat+ cezasız iade.", "**1-12 saat iade: 1250 TL."] }, en: { title: "THY ERCAN PRIME FLY", details: ["*1h+ free change.", "**12h+ free refund.", "**1-12h refund: 1250 TL."] } },
-            { id: 15, tr: { title: "THY ERCAN BUSINESS", details: ["*12 saat+ cezasız değişim.", "*1-12 saat değişim: 5000 TL.", "**12 saat+ cezasız iade.", "**1-12 saat iade: 4750 TL."] }, en: { title: "THY ERCAN BUSINESS", details: ["*12h+ free change.", "*1-12h change: 5000 TL.", "**12h+ free refund.", "**1-12h refund: 4750 TL."] } },
-            { id: 16, tr: { title: "AJET BASIC (V/P/W/U/5/6/7/8/9)", details: ["Değişiklik yapılamaz.", "İade yok.", "Bagaj: 15KG"] }, en: { title: "AJET BASIC (V/P/W/U/5/6/7/8/9)", details: ["No changes allowed.", "No refund.", "Baggage: 15KG"] } },
-            { id: 17, tr: { title: "AJET BASIC (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", details: ["*1-12 saat+ değişim: 950 TL.", "**12 saat+ iade: 1100 TL."] }, en: { title: "AJET BASIC (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", details: ["*1-12h+ change: 950 TL.", "**12h+ refund: 1100 TL."] } },
-            { id: 18, tr: { title: "AJET FLEX (V/P/W/U/5/6/7/8/9)", details: ["*1-12 saat değişim: 600 TL.", "*12 saat+ değişim: 400 TL.", "İade yok.", "Bagaj: 20KG"] }, en: { title: "AJET FLEX (V/P/W/U/5/6/7/8/9)", details: ["*1-12h change: 600 TL.", "*12h+ change: 400 TL.", "No refund.", "Baggage: 20KG"] } },
-            { id: 19, tr: { title: "AJET FLEX (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", details: ["*1-12 saat değişim: 950 TL.", "*12 saat+ değişim: 750 TL.", "**1-12 saat iade: 1100 TL.", "**12 saat+ iade: 900 TL."] }, en: { title: "AJET FLEX (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", details: ["*1-12h change: 950 TL.", "*12h+ change: 750 TL.", "**1-12h refund: 1100 TL.", "**12h+ refund: 900 TL."] } },
-            { id: 20, tr: { title: "AJET PREMIUM İÇ HAT (V/P/W/U/5/6/7/8/9)", details: ["*1 saat+ cezasız değişim.", "**1-12 saat iade: 600 TL.", "**12 saat+ cezasız iade."] }, en: { title: "AJET PREMIUM DOMESTIC (V/P/W/U/5/6/7/8/9)", details: ["*1h+ free change.", "**1-12h refund: 600 TL.", "**12h+ free refund."] } },
-            { id: 21, tr: { title: "AJET PREMIUM İÇ HAT (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", details: ["*1 saat+ cezasız değişim.", "**1-12 saat iade: 750 TL.", "**12 saat+ cezasız iade."] }, en: { title: "AJET PREMIUM DOMESTIC (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", details: ["*1h+ free change.", "**1-12h refund: 750 TL.", "**12h+ free refund."] } },
-            { id: 22, tr: { title: "AJET BASIC (ERCAN)", details: ["*1-12 saat değişim: 755 TL.", "*12 saat+ değişim: 655 TL.", "**12 saat+ iade: 985 TL."] }, en: { title: "AJET BASIC (ERCAN)", details: ["*1-12h change: 755 TL.", "*12h+ change: 655 TL.", "**12h+ refund: 985 TL."] } },
-            { id: 23, tr: { title: "AJET ECOJET (ERCAN)", details: ["*1-12 saat değişim: 755 TL.", "*12 saat+ değişim: 655 TL.", "**12 saat+ iade: 985 TL."] }, en: { title: "AJET ECOJET (ERCAN)", details: ["*1-12h change: 755 TL.", "*12h+ change: 655 TL.", "**12h+ refund: 985 TL."] } },
-            { id: 24, tr: { title: "AJET FLEX ERCAN (U/W/P)", details: ["*1-12 saat değişim: 500 TL.", "*12 saat+ değişim: 400 TL.", "İade yok."] }, en: { title: "AJET FLEX ERCAN (U/W/P)", details: ["*1-12h change: 500 TL.", "*12h+ change: 400 TL.", "No refund."] } },
-            { id: 25, tr: { title: "AJET FLEX ERCAN (V/L/T/G/Q/O/Y/E/B/M/A/O/S/H/Y)", details: ["*1-12 saat değişim: 500 TL.", "*12 saat+ değişim: 400 TL.", "**1-12 saat iade: 720 TL.", "**12 saat+ iade: 500 TL."] }, en: { title: "AJET FLEX ERCAN (V/L/T/G/Q/O/Y/E/B/M/A/O/S/H/Y)", details: ["*1-12h change: 500 TL.", "*12h+ change: 400 TL.", "**1-12h refund: 720 TL.", "**12h+ refund: 500 TL."] } },
-            { id: 26, tr: { title: "AJET PREMIUM (ERCAN)", details: ["Cezasız değişim.", "1-12 saat iade: 655 TL.", "12 saat+ iade: 150 TL."] }, en: { title: "AJET PREMIUM (ERCAN)", details: ["Free change.", "1-12h refund: 655 TL.", "12h+ refund: 150 TL."] } },
-            { id: 27, tr: { title: "PEGASUS İÇ HAT (G/P/U/T/Z/N/X/S/N)", details: ["2 saat+ değişim: 600 TL.", "İade yok."] }, en: { title: "PEGASUS DOMESTIC (G/P/U/T/Z/N/X/S/N)", details: ["2h+ change: 600 TL.", "No refund."] } },
-            { id: 28, tr: { title: "PEGASUS İÇ HAT (K/H/M/L/B/Y)", details: ["2 saat+ değişim: 950 TL.", "12 saat+ iade: 1100 TL."] }, en: { title: "PEGASUS DOMESTIC (K/H/M/L/B/Y)", details: ["2h+ change: 950 TL.", "12h+ refund: 1100 TL."] } },
-            { id: 29, tr: { title: "SUNEXPRESS SUNVALUE (İÇ HAT)", details: ["24 saat+ değişim: 500 TL.", "12 saat+ iade: 900 TL."] }, en: { title: "SUNEXPRESS SUNVALUE (DOMESTIC)", details: ["24h+ change: 500 TL.", "12h+ refund: 900 TL."] } },
-            { id: 30, tr: { title: "SUNEXPRESS SUNECO+ (İÇ HAT)", details: ["2 saat+ cezasız değişim.", "6 saat+ cezasız iade."] }, en: { title: "SUNEXPRESS SUNECO+ (DOMESTIC)", details: ["2h+ free change.", "6h+ free refund."] } },
-            { id: 31, tr: { title: "SUNEXPRESS SUNCOMFORT (İÇ HAT)", details: ["24 saat+ değişim: 500 TL.", "12 saat+ iade: 900 TL."] }, en: { title: "SUNEXPRESS SUNCOMFORT (DOMESTIC)", details: ["24h+ change: 500 TL.", "12h+ refund: 900 TL."] } },
-            { id: 32, tr: { title: "PEGASUS KKTC (U/G/P/T/Z/V/X/S)", details: ["2 saat+ değişim: 25 EUR.", "İade yok."] }, en: { title: "PEGASUS KKTC (U/G/P/T/Z/V/X/S)", details: ["2h+ change: 25 EUR.", "No refund."] } },
-            { id: 33, tr: { title: "PEGASUS KKTC (N/K)", details: ["2 saat+ değişim: 40 EUR.", "12 saat+ iade: 40 EUR."] }, en: { title: "PEGASUS KKTC (N/K)", details: ["2h+ change: 40 EUR.", "12h+ refund: 40 EUR."] } },
-            { id: 34, tr: { title: "PEGASUS KKTC (H)", details: ["2 saat+ değişim: 50 EUR.", "12 saat+ iade: 50 EUR."] }, en: { title: "PEGASUS KKTC (H)", details: ["2h+ change: 50 EUR.", "12h+ refund: 50 EUR."] } },
-            { id: 35, tr: { title: "PEGASUS KKTC (M)", details: ["2 saat+ değişim: 60 EUR.", "12 saat+ iade: 60 EUR."] }, en: { title: "PEGASUS KKTC (M)", details: ["2h+ change: 60 EUR.", "12h+ refund: 60 EUR."] } },
-            { id: 36, tr: { title: "PEGASUS KKTC (L)", details: ["2 saat+ değişim: 70 EUR.", "12 saat+ iade: 70 EUR."] }, en: { title: "PEGASUS KKTC (L)", details: ["2h+ change: 70 EUR.", "12h+ refund: 70 EUR."] } },
-            { id: 37, tr: { title: "PEGASUS KKTC (B)", details: ["2 saat+ değişim: 80 EUR.", "12 saat+ iade: 80 EUR."] }, en: { title: "PEGASUS KKTC (B)", details: ["2h+ change: 80 EUR.", "12h+ refund: 80 EUR."] } },
-            { id: 38, tr: { title: "PEGASUS KKTC (Y)", details: ["2 saat+ değişim: 90 EUR.", "12 saat+ iade: 90 EUR."] }, en: { title: "PEGASUS KKTC (Y)", details: ["2h+ change: 90 EUR.", "12h+ refund: 90 EUR."] } },
-            { id: 39, tr: { title: "AJET BASIC (DIŞ HAT)", details: ["Öncesi değişim: 75 USD/EUR.", "İade yok."] }, en: { title: "AJET BASIC (INTL)", details: ["Pre-flight change: 75 USD/EUR.", "No refund."] } },
-            { id: 40, tr: { title: "AJET EKOJET (DIŞ HAT)", details: ["Öncesi değişim: 55 USD.", "İade yok."] }, en: { title: "AJET EKOJET (INTL)", details: ["Pre-flight change: 55 USD.", "No refund."] } },
-            { id: 41, tr: { title: "AJET FLEX (DIŞ HAT)", details: ["Öncesi değişim: 35 USD.", "2 saat+ iade: 95 USD."] }, en: { title: "AJET FLEX (INTL)", details: ["Pre-flight change: 35 USD.", "2h+ refund: 95 USD."] } },
-            { id: 42, tr: { title: "AJET PREMIUM (DIŞ HAT)", details: ["Öncesi cezasız değişim.", "İade cezası yok."] }, en: { title: "AJET PREMIUM (INTL)", details: ["Pre-flight free change.", "No refund penalty."] } },
-            { id: 43, tr: { title: "PEGASUS DIŞ HAT (G/P)", details: ["Değişiklik yok.", "İade yok."] }, en: { title: "PEGASUS INTL (G/P)", details: ["No changes.", "No refunds."] } },
-            { id: 44, tr: { title: "PEGASUS DIŞ HAT (U)", details: ["2 saat+ değişim: 40 EUR.", "İade yok."] }, en: { title: "PEGASUS INTL (U)", details: ["2h+ change: 40 EUR.", "No refund."] } },
-            { id: 45, tr: { title: "PEGASUS DIŞ HAT (T)", details: ["2 saat+ değişim: 55 EUR.", "İade yok."] }, en: { title: "PEGASUS INTL (T)", details: ["2h+ change: 55 EUR.", "No refund."] } },
-            { id: 46, tr: { title: "PEGASUS DIŞ HAT (Z/V/X/S)", details: ["2 saat+ değişim: 80 EUR.", "12 saat+ iade: 95 EUR."] }, en: { title: "PEGASUS INTL (Z/V/X/S)", details: ["2h+ change: 80 EUR.", "12h+ refund: 95 EUR."] } },
-            { id: 47, tr: { title: "PEGASUS DIŞ HAT (N/K)", details: ["2 saat+ değişim: 95 EUR.", "12 saat+ iade: 110 EUR."] }, en: { title: "PEGASUS INTL (N/K)", details: ["2h+ change: 95 EUR.", "12h+ refund: 110 EUR."] } },
-            { id: 48, tr: { title: "PEGASUS DIŞ HAT (H)", details: ["2 saat+ değişim: 110 EUR.", "12 saat+ iade: 140 EUR."] }, en: { title: "PEGASUS INTL (H)", details: ["2h+ change: 110 EUR.", "12h+ refund: 140 EUR."] } },
-            { id: 49, tr: { title: "PEGASUS DIŞ HAT (M)", details: ["2 saat+ değişim: 130 EUR.", "12 saat+ iade: 165 EUR."] }, en: { title: "PEGASUS INTL (M)", details: ["2h+ change: 130 EUR.", "12h+ refund: 165 EUR."] } },
-            { id: 50, tr: { title: "PEGASUS DIŞ HAT (L)", details: ["2 saat+ değişim: 145 EUR.", "12 saat+ iade: 165 EUR."] }, en: { title: "PEGASUS INTL (L)", details: ["2h+ change: 145 EUR.", "12h+ refund: 165 EUR."] } },
-            { id: 51, tr: { title: "PEGASUS DIŞ HAT (B)", details: ["2 saat+ değişim: 165 EUR.", "12 saat+ iade: 190 EUR."] }, en: { title: "PEGASUS INTL (B)", details: ["2h+ change: 165 EUR.", "12h+ refund: 190 EUR."] } },
-            { id: 52, tr: { title: "PEGASUS DIŞ HAT (Y)", details: ["2 saat+ değişim: 230 EUR.", "12 saat+ iade: 265 EUR."] }, en: { title: "PEGASUS INTL (Y)", details: ["2h+ change: 230 EUR.", "12h+ refund: 265 EUR."] } }
+          {
+            id: 1,
+            title: { tr: "THY ECO FLY (U/W/P/V/L/T)", en: "THY ECO FLY (U/W/P/V/L/T)" },
+            details: {
+              tr: ["*Değişiklik yapılamaz.", "**İadeye izin verilmez.", "***Koltuk seçimi ücretli yapılabilir.", "***Yetişkin yolcu serbest bagaj hakkı 15KG şeklindedir."],
+              en: ["*No changes allowed.", "**No refunds allowed.", "***Seat selection is available for a fee.", "***Adult passenger free baggage allowance is 15KG."]
+            }
+          },
+          {
+            id: 2,
+            title: { tr: "THY ECO FLY (Q)", en: "THY ECO FLY (Q)" },
+            details: {
+              tr: ["*Uçuşa 12 saat ve fazla zaman var ise değişiklikte yön başına 1100 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala değişiklikte yön başına 1350 TL cezalı işlem yapılır.", "*Uçuşa 1 saat kala değişikliğe izin vermez.", "** İadeye izin verilmez.", "***Koltuk seçimi ücretli yapılabilir.", "***Yetişkin yolcu serbest bagaj hakkı 15KG şeklindedir."],
+              en: ["*If 12h+ before flight, 1100 TL penalty per direction for changes.", "*If 1-12h before flight, 1350 TL penalty per direction for changes.", "*No changes within 1h of flight.", "**No refunds allowed.", "***Seat selection for a fee.", "***Baggage allowance 15KG."]
+            }
+          },
+          {
+            id: 3,
+            title: { tr: "THY ECO FLY (E)", en: "THY ECO FLY (E)" },
+            details: {
+              tr: ["*Uçuşa 12 saat ve fazla zaman var ise değişiklikte yön başına 1100 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala değişiklikte yön başına 1350 TL cezalı işlem yapılır.", "*Uçuşa 1 saatten az zaman kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve fazla zaman var ise yön başına 1450 TL cezalı iade yapılır.", "**Uçuşa 12 saatten daha az zaman kala iadeye izin verilmez."],
+              en: ["*12h+ before: 1100 TL change penalty.", "*1-12h before: 1350 TL change penalty.", "*No changes within 1h.", "**12h+ before: 1450 TL refund penalty.", "**No refunds within 12h."]
+            }
+          },
+          {
+            id: 4,
+            title: { tr: "THY ECO FLY (O/S/H/A/M/B)", en: "THY ECO FLY (O/S/H/A/M/B)" },
+            details: {
+              tr: ["*Uçuşa 12 saat ve fazla zaman var ise değişiklikte yön başına 1100 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala değişiklikte yön başına 1350 TL cezalı işlem yapılır.", "*Uçuşa 1 saatten az zaman kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve fazla zaman var ise yön başına 1450 TL cezalı iade yapılır.", "**Uçuşa 12 saatten daha az zaman kala iadeye izin verilmez."],
+              en: ["*12h+ before: 1100 TL change penalty.", "*1-12h before: 1350 TL change penalty.", "*No changes within 1h.", "**12h+ before: 1450 TL refund penalty.", "**No refunds within 12h."]
+            }
+          },
+          {
+            id: 5,
+            title: { tr: "THY EXTRA FLY (P/V)", en: "THY EXTRA FLY (P/V)" },
+            details: {
+              tr: ["*Uçuşa 12 saatten fazla zaman var ise değişiklikte yön başına 350 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala yön başına 600 TL cezalı değişiklik yapılır.", "*Uçuşa 1 saat kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve daha fazla zaman kala yön başına 650 TL cezalı iadesi yapılır.", "**Uçuşa 12 saat kala iade yapılamaz."],
+              en: ["*12h+ before: 350 TL change penalty.", "*1-12h before: 600 TL change penalty.", "*No changes within 1h.", "**12h+ before: 650 TL refund penalty.", "**No refunds within 12h."]
+            }
+          },
+          {
+            id: 6,
+            title: { tr: "THY EXTRA FLY (L/T/Q/E/O/S/H/A/M/B)", en: "THY EXTRA FLY (L/T/Q/E/O/S/H/A/M/B)" },
+            details: {
+              tr: ["*Uçuşa 12 saatten fazla zaman var ise değişiklikte yön başına 350 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala yön başına 600 TL cezalı değişiklik yapılır.", "*Uçuşa 1 saat kala değişikliğe izin vermez.", "**Uçuşa 12 saat ve daha fazla zaman kala yön başına 650 TL cezalı iadesi yapılır.", "**Uçuşa 1-12 saat kala yön başına 950 TL cezalı iadesi yapılır."],
+              en: ["*12h+ before: 350 TL change penalty.", "*1-12h before: 600 TL change penalty.", "*No changes within 1h.", "**12h+ before: 650 TL refund penalty.", "**1-12h before: 950 TL refund penalty."]
+            }
+          },
+          {
+            id: 7,
+            title: { tr: "THY PRIME FLY (V/L/T/Q/E/O/S/H/A/M/B)", en: "THY PRIME FLY (V/L/T/Q/E/O/S/H/A/M/B)" },
+            details: {
+              tr: ["*Uçuşa 1 saat ve daha fazla zaman kala cezasız değişiklik yapılır.", "*Uçuşa 1 saat kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve daha fazla zaman kala cezasız iadesi yapılır.", "**Uçuşa 1-12 saat kala yön başına 850 TL cezalı iadesi yapılır.", "**Uçuşa 1 saatten az zaman kala iadeye izin verilmez."],
+              en: ["*No penalty for changes 1h+ before.", "*No changes within 1h.", "**No penalty for refunds 12h+ before.", "**1-12h before: 850 TL refund penalty.", "**No refunds within 1h."]
+            }
+          },
+          {
+            id: 8,
+            title: { tr: "THY BUSINESS KURALLAR", en: "THY BUSINESS RULES" },
+            details: {
+              tr: ["*Uçuşa 12 saat ve daha fazla zaman kala cezasız değişiklik yapılır.", "*Uçuşa 1-12 saat arasında yön başına 3500 TL cezalı değişiklik yapılır.", "*Uçuşa 1 saatten az zaman kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve fazla zaman kala cezasız iade yapılır.", "**Uçuşa 1-12 saat kala yön başına 3500 TL cezalı iade yapılır."],
+              en: ["*No penalty for changes 12h+ before.", "*1-12h before: 3500 TL change penalty.", "*No changes within 1h.", "**No penalty for refunds 12h+ before.", "**1-12h before: 3500 TL refund penalty."]
+            }
+          },
+          {
+            id: 9,
+            title: { tr: "THY ERCAN ECO FLY (U/W/P/V)", en: "THY ERCAN ECO FLY (U/W/P/V)" },
+            details: {
+              tr: ["*Değişiklik yapılamaz.", "**İadeye izin verilmez.", "***Koltuk seçimi ücretli yapılabilir.", "***Yetişkin yolcu serbest bagaj hakkı 15KG şeklindedir."],
+              en: ["*No changes allowed.", "**No refunds allowed.", "***Seat selection for a fee.", "***Baggage 15KG."]
+            }
+          },
+          {
+            id: 10,
+            title: { tr: "THY ERCAN ECO FLY (L)", en: "THY ERCAN ECO FLY (L)" },
+            details: {
+              tr: ["*Uçuşa 12 saat ve fazla zaman var ise değişiklikte yön başına 1750 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala değişiklikte yön başına 1950 TL cezalı işlem yapılır.", "*Uçuşa 1 saatten az zaman kala değişikliğe izin verilmez.", "**İadeye izin verilmez."],
+              en: ["*12h+ before: 1750 TL change penalty.", "*1-12h before: 1950 TL change penalty.", "*No changes within 1h.", "**No refunds allowed."]
+            }
+          },
+          {
+            id: 11,
+            title: { tr: "THY ERCAN ECO FLY (T/Q/E/O/S/H/A/M/B)", en: "THY ERCAN ECO FLY (T/Q/E/O/S/H/A/M/B)" },
+            details: {
+              tr: ["*Uçuşa 12 saat ve fazla zaman var ise değişiklikte yön başına 1750 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala değişiklikte yön başına 1950 TL cezalı işlem yapılır.", "*Uçuşa 1 saatten az zaman kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve fazla zaman var ise yön başına 1950 TL cezalı iade yapılır."],
+              en: ["*12h+ before: 1750 TL change penalty.", "*1-12h before: 1950 TL change penalty.", "*No changes within 1h.", "**12h+ before: 1950 TL refund penalty."]
+            }
+          },
+          {
+            id: 12,
+            title: { tr: "THY ERCAN EXTRA FLY (U/W)", en: "THY ERCAN EXTRA FLY (U/W)" },
+            details: {
+              tr: ["*Uçuşa 12 saat ve fazla zaman var ise değişiklikte yön başına 700 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala değişiklikte yön başına 900 TL cezalı işlem yapılır.", "*Uçuşa 1 saat kala değişikliğe izin vermez.", "**Uçuşa 12 saat ve fazla zaman var ise yön başına 900 TL cezalı iade yapılır."],
+              en: ["*12h+ before: 700 TL change penalty.", "*1-12h before: 900 TL change penalty.", "*No changes within 1h.", "**12h+ before: 900 TL refund penalty."]
+            }
+          },
+          {
+            id: 13,
+            title: { tr: "THY ERCAN EXTRA FLY (P/V/L/Q/E/O/S/H/A/M/B)", en: "THY ERCAN EXTRA FLY (P/V/L/Q/E/O/S/H/A/M/B)" },
+            details: {
+              tr: ["*Uçuşa 12 saat ve fazla zaman var ise değişiklikte yön başına 700 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala değişiklikte yön başına 900 TL cezalı işlem yapılır.", "*Uçuşa 1 saat kala değişikliğe izin vermez.", "**Uçuşa 12 saat ve fazla zaman var ise yön başına 900 TL cezalı iade yapılır."],
+              en: ["*12h+ before: 700 TL change penalty.", "*1-12h before: 900 TL change penalty.", "*No changes within 1h.", "**12h+ before: 900 TL refund penalty."]
+            }
+          },
+          {
+            id: 14,
+            title: { tr: "THY ERCAN PRIME FLY KURALLAR", en: "THY ERCAN PRIME FLY RULES" },
+            details: {
+              tr: ["*Uçuşa 1 saat ve daha fazla zaman kala cezasız değişiklik yapılır.", "*Uçuşa 1 saatten az zaman kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve daha fazla fazla zaman kala cezasız iadeye alınır.", "**Uçuşa 1-12 saat kala yön başına 1250 TL cezalı iadeye alınır."],
+              en: ["*No penalty for changes 1h+ before.", "*No changes within 1h.", "**No penalty for refunds 12h+ before.", "**1-12h before: 1250 TL refund penalty."]
+            }
+          },
+          {
+            id: 15,
+            title: { tr: "THY ERCAN BUSINESS KURALLAR", en: "THY ERCAN BUSINESS RULES" },
+            details: {
+              tr: ["*Uçuşa 12 saat ve daha fazla zaman kala cezasız değişiklik yapılır.", "*Uçuşa 1-12 saat kala değişiklikte yön başına 5000 TL cezalı işlem yapılır.", "*Uçuşa 1 saatten az zaman kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve daha fazla zaman kala cezasız iadeye alınır."],
+              en: ["*No penalty for changes 12h+ before.", "*1-12h before: 5000 TL change penalty.", "*No changes within 1h.", "**No penalty for refunds 12h+ before."]
+            }
+          },
+          {
+            id: 16,
+            title: { tr: "AJET BASIC (V/P/W/U/5/6/7/8/9)", en: "AJET BASIC (V/P/W/U/5/6/7/8/9)" },
+            details: {
+              tr: ["*Değişiklik yapılamaz.", "**İadeye izin verilmez.", "***Koltuk seçimi ücretli yapılabilir.", "***Yetişkin yolcu serbest bagaj hakkı 15KG şeklindedir."],
+              en: ["*No changes allowed.", "**No refunds allowed.", "***Seat selection for a fee.", "***Baggage 15KG."]
+            }
+          },
+          {
+            id: 17,
+            title: { tr: "AJET BASIC (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", en: "AJET BASIC (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)" },
+            details: {
+              tr: ["*Uçuşa 1-12 saat ve üstü değişiklikte yön başına 950 TL cezalı işlem yapılır.", "*Uçuşa 1 saatten az zaman kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve üzeri yön başına 1100 TL cezalı iade yapılır.", "**Uçuşa 12 saatten az zaman kala iadeye izin verilmez."],
+              en: ["*1h+ before: 950 TL change penalty.", "*No changes within 1h.", "**12h+ before: 1100 TL refund penalty.", "**No refunds within 12h."]
+            }
+          },
+          {
+            id: 18,
+            title: { tr: "AJET FLEX (V/P/W/U/5/6/7/8/9)", en: "AJET FLEX (V/P/W/U/5/6/7/8/9)" },
+            details: {
+              tr: ["*Uçuşa 1 saat kala değişikliğe izin verilmez.", "*Uçuşa 1–12 saat arası değişiklikte yön başına 600 TL işlem bedeli uygulanır.", "*Uçuşa 12 saat ve üzeri değişiklikte yön başına 400 TL işlem bedeli uygulanır.", "**İadeye izin verilmez."],
+              en: ["*No changes within 1h.", "*1-12h before: 600 TL change penalty.", "*12h+ before: 400 TL change penalty.", "**No refunds allowed."]
+            }
+          },
+          {
+            id: 19,
+            title: { tr: "AJET FLEX (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", en: "AJET FLEX (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)" },
+            details: {
+              tr: ["*Uçuşa 0–1 saat kala değişikliğe izin verilmez.", "*Uçuşa 1–12 saat arası değişiklikte yön başına 950 TL işlem bedeli uygulanır.", "*Uçuşa 12 saat ve üzeri değişiklikte yön başına 750 TL işlem bedeli uygulanır.", "**Uçuşa 0–1 saat kala iadeye izin verilmez."],
+              en: ["*No changes within 1h.", "*1-12h before: 950 TL change penalty.", "*12h+ before: 750 TL change penalty.", "**No refunds within 1h."]
+            }
+          },
+          {
+            id: 20,
+            title: { tr: "AJET PREMIUM (İÇ HAT) : (V/P/W/U/5/6/7/8/9)", en: "AJET PREMIUM (DOMESTIC) : (V/P/W/U/5/6/7/8/9)" },
+            details: {
+              tr: ["*Uçuşa 0–1 saat kala değişikliğe izin verilmez.", "*Uçuşa 1–12 saat ve üzeri değişiklikte işlem bedeli uygulanmaz.", "**Uçuşa 0–1 saat kala iadeye izin verilmez.", "**Uçuşa 1–12 saat arası yön başına 600 TL işlem bedeli ile iade yapılır.", "**Uçuşa 12 saat ve üzeri cezasız iade yapılır."],
+              en: ["*No changes within 1h.", "*No penalty for changes 1h+ before.", "**No refunds within 1h.", "**1-12h before: 600 TL refund penalty.", "**No penalty for refunds 12h+ before."]
+            }
+          },
+          {
+            id: 21,
+            title: { tr: "AJET PREMIUM (İÇ HAT) : (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)", en: "AJET PREMIUM (DOMESTIC) : (Y/B/M/A/H/S/O/E/Q/T/L/1/2/3/4)" },
+            details: {
+              tr: ["*Uçuşa 0–1 saat kala değişikliğe izin verilmez.", "*Uçuşa 1–12 saat ve üzeri değişiklikte işlem bedeli uygulanmaz.", "**Uçuşa 0–1 saat kala iadeye izin verilmez.", "**Uçuşa 1–12 saat arası yön başına 750 TL işlem bedeli ile iade yapılır.", "**Uçuşa 12 saat ve üzeri cezasız iade yapılır."],
+              en: ["*No changes within 1h.", "*No penalty for changes 1h+ before.", "**No refunds within 1h.", "**1-12h before: 750 TL refund penalty.", "**No penalty for refunds 12h+ before."]
+            }
+          },
+          {
+            id: 22,
+            title: { tr: "AJET BASIC (ERCAN)", en: "AJET BASIC (ERCAN)" },
+            details: {
+              tr: ["*Uçuşa 0–1 saat kala değişikliğe izin verilmez.", "*Uçuşa 1–12 saat arası değişiklikte 755 TL işlem bedeli uygulanır.", "*Uçuşa 12 saat ve üzeri değişiklikte 655 TL işlem bedeli uygulanır.", "**Uçuşa 0–12 saat kala iadeye izin verilmez."],
+              en: ["*No changes within 1h.", "*1-12h before: 755 TL change penalty.", "*12h+ before: 655 TL change penalty.", "**No refunds within 12h."]
+            }
+          },
+          {
+            id: 23,
+            title: { tr: "AJET ECOJET (ERCAN)", en: "AJET ECOJET (ERCAN)" },
+            details: {
+              tr: ["*Uçuşa 0–1 saat kala değişikliğe izin verilmez.", "*Uçuşa 1–12 saat arası değişiklikte 755 TL işlem bedeli uygulanır.", "*Uçuşa 12 saat ve üzeri değişiklikte 655 TL işlem bedeli uygulanır.", "**Uçuşa 0–12 saat kala iadeye izin verilmez."],
+              en: ["*No changes within 1h.", "*1-12h before: 755 TL change penalty.", "*12h+ before: 655 TL change penalty.", "**No refunds within 12h."]
+            }
+          },
+          {
+            id: 24,
+            title: { tr: "AJET FLEX (ERCAN) : (1/2/3/4/5/6/7/8/9/U/W/P)", en: "AJET FLEX (ERCAN) : (1/2/3/4/5/6/7/8/9/U/W/P)" },
+            details: {
+              tr: ["*Uçuşa 0–1 saat kala değişikliğe izin verilmez.", "*Uçuşa 1–12 saat arası değişiklikte 500 TL işlem bedeli uygulanır.", "*Uçuşa 12 saat ve üzeri değişiklikte 400 TL işlem bedeli uygulanır.", "**İadeye izin verilmez."],
+              en: ["*No changes within 1h.", "*1-12h before: 500 TL change penalty.", "*12h+ before: 400 TL change penalty.", "**No refunds allowed."]
+            }
+          },
+          {
+            id: 25,
+            title: { tr: "AJET FLEX (ERCAN) : (V/L/T/G/Q/O/Y/E/B/M/A/O/S/H/Y)", en: "AJET FLEX (ERCAN) : (V/L/T/G/Q/O/Y/E/B/M/A/O/S/H/Y)" },
+            details: {
+              tr: ["*Uçuşa 0–1 saat kala değişikliğe izin verilmez.", "*Uçuşa 1–12 saat arası değişiklikte 500 TL işlem bedeli uygulanır.", "*Uçuşa 12 saat ve üzeri değişiklikte 400 TL işlem bedeli uygulanır.", "**Uçuşa 0–1 saat kala iadeye izin verilmez."],
+              en: ["*No changes within 1h.", "*1-12h before: 500 TL change penalty.", "*12h+ before: 400 TL change penalty.", "**No refunds within 1h."]
+            }
+          },
+          {
+            id: 26,
+            title: { tr: "AJET PREMIUM (ERCAN)", en: "AJET PREMIUM (ERCAN)" },
+            details: {
+              tr: ["*Uçuşa 0–1 saat kala değişikliğe izin verilmez.", "*Uçuşa 1–12 saat ve üzeri değişiklikte işlem bedeli uygulanmaz.", "**Uçuşa 0–1 saat kala iadeye izin verilmez.", "**Uçuşa 1–12 saat arası 655 TL işlem bedeli ile iade yapılır."],
+              en: ["*No changes within 1h.", "*No penalty for changes 1h+ before.", "**No refunds within 1h.", "**1-12h before: 655 TL refund penalty."]
+            }
+          },
+          {
+            id: 27,
+            title: { tr: "PEGASUS İÇ HAT (G/P/U/T/Z/N/X/S/N)", en: "PEGASUS DOMESTIC (G/P/U/T/Z/N/X/S/N)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 600 TL işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**İadeye izin verilmez."],
+              en: ["*2h+ before: 600 TL change penalty.", "*No changes within 2h.", "**No refunds allowed."]
+            }
+          },
+          {
+            id: 28,
+            title: { tr: "PEGASUS İÇ HAT (K/H/M/L/B/Y)", en: "PEGASUS DOMESTIC (K/H/M/L/B/Y)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 950 TL işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 1.100 TL işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 950 TL change penalty.", "*No changes within 2h.", "**12h+ before: 1100 TL refund penalty."]
+            }
+          },
+          {
+            id: 29,
+            title: { tr: "SUNEXPRESS SUNVALUE (İÇ HAT)", en: "SUNEXPRESS SUNVALUE (DOMESTIC)" },
+            details: {
+              tr: ["*Uçuşa 24 saatten fazla süre kala değişiklikte 500 TL işlem bedeli uygulanır.", "*Uçuşa 24 saatten az süre kala değişiklikte 600 TL işlem bedeli uygulanır.", "**Uçuşa 12 saatten fazla süre kala 900 TL kesinti ile iade yapılır."],
+              en: ["*24h+ before: 500 TL change penalty.", "*<24h before: 600 TL change penalty.", "**12h+ before: 900 TL refund penalty."]
+            }
+          },
+          {
+            id: 30,
+            title: { tr: "SUNEXPRESS SUNECO+ (İÇ HAT)", en: "SUNEXPRESS SUNECO+ (DOMESTIC)" },
+            details: {
+              tr: ["*Uçuşa 2 saatten fazla süre kala değişiklik ücretsizdir.", "*Uçuşa 2 saatten az süre kala değişiklikte 600 TL işlem bedeli uygulanır.", "**Uçuşa 6 saatten fazla süre kala ücretsiz iade yapılır."],
+              en: ["*2h+ before: Free change.", "*<2h before: 600 TL change penalty.", "**6h+ before: Free refund."]
+            }
+          },
+          {
+            id: 31,
+            title: { tr: "SUNEXPRESS SUNCOMFORT (İÇ HAT)", en: "SUNEXPRESS SUNCOMFORT (DOMESTIC)" },
+            details: {
+              tr: ["*Uçuşa 24 saatten fazla süre kala değişiklikte 500 TL işlem bedeli uygulanır.", "*Uçuşa 24 saatten az süre kala değişiklikte 600 TL işlem bedeli uygulanır.", "**Uçuşa 12 saatten fazla süre kala 900 TL kesinti ile iade yapılır."],
+              en: ["*24h+ before: 500 TL change penalty.", "*<24h before: 600 TL change penalty.", "**12h+ before: 900 TL refund penalty."]
+            }
+          },
+          {
+            id: 32,
+            title: { tr: "PEGASUS KKTC (PROMOSYON G/P/T/Z/V/X/S)", en: "PEGASUS KKTC (PROMO G/P/T/Z/V/X/S)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 25 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**İadeye izin verilmez."],
+              en: ["*2h+ before: 25 EUR change penalty.", "*No changes within 2h.", "**No refunds allowed."]
+            }
+          },
+          {
+            id: 33,
+            title: { tr: "PEGASUS KKTC (STANDART N / K)", en: "PEGASUS KKTC (STANDARD N / K)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 40 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 40 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 40 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 40 EUR refund penalty."]
+            }
+          },
+          {
+            id: 34,
+            title: { tr: "PEGASUS KKTC (STANDART H)", en: "PEGASUS KKTC (STANDARD H)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 50 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 50 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 50 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 50 EUR refund penalty."]
+            }
+          },
+          {
+            id: 35,
+            title: { tr: "PEGASUS KKTC (STANDART M)", en: "PEGASUS KKTC (STANDARD M)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 60 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 60 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 60 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 60 EUR refund penalty."]
+            }
+          },
+          {
+            id: 36,
+            title: { tr: "PEGASUS KKTC (STANDART L)", en: "PEGASUS KKTC (STANDARD L)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 70 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 70 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 70 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 70 EUR refund penalty."]
+            }
+          },
+          {
+            id: 37,
+            title: { tr: "PEGASUS KKTC (STANDART B)", en: "PEGASUS KKTC (STANDARD B)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 80 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 80 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 80 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 80 EUR refund penalty."]
+            }
+          },
+          {
+            id: 38,
+            title: { tr: "PEGASUS KKTC (STANDART Y)", en: "PEGASUS KKTC (STANDARD Y)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 90 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 90 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 90 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 90 EUR refund penalty."]
+            }
+          },
+          {
+            id: 39,
+            title: { tr: "AJET BASIC (DIŞ HAT)", en: "AJET BASIC (INTERNATIONAL)" },
+            details: {
+              tr: ["*Uçuş saati öncesi değişiklikte 75 USD/EUR işlem bedeli uygulanır.", "*Uçuş saati sonrası değişiklikte 150 USD/EUR işlem bedeli uygulanır.", "**İadeye izin verilmez."],
+              en: ["*Before flight: 75 USD/EUR change penalty.", "*After flight: 150 USD/EUR change penalty.", "**No refunds allowed."]
+            }
+          },
+          {
+            id: 40,
+            title: { tr: "AJET EKOJET (DIŞ HAT)", en: "AJET EKOJET (INTERNATIONAL)" },
+            details: {
+              tr: ["*Uçuş saati öncesi değişiklikte 55 USD işlem bedeli uygulanır.", "*Uçuş saati sonrası değişiklikte 130 USD işlem bedeli uygulanır.", "**İadeye izin verilmez."],
+              en: ["*Before flight: 55 USD change penalty.", "*After flight: 130 USD change penalty.", "**No refunds allowed."]
+            }
+          },
+          {
+            id: 41,
+            title: { tr: "AJET FLEX (DIŞ HAT)", en: "AJET FLEX (INTERNATIONAL)" },
+            details: {
+              tr: ["*Uçuş saati öncesi değişiklikte 35 USD işlem bedeli uygulanır.", "*Uçuş saati sonrası değişiklikte 90 USD işlem bedeli uygulanır.", "**Uçuş saatine 2 saatten az zaman kala iadeye izin verilmez."],
+              en: ["*Before flight: 35 USD change penalty.", "*After flight: 90 USD change penalty.", "**No refunds within 2h."]
+            }
+          },
+          {
+            id: 42,
+            title: { tr: "AJET PREMIUM (DIŞ HAT)", en: "AJET PREMIUM (INTERNATIONAL)" },
+            details: {
+              tr: ["*Uçuş saati öncesi değişiklikte işlem bedeli uygulanmaz.", "*Uçuş saati sonrası değişiklikte 55 USD işlem bedeli uygulanır.", "**İade cezası bulunmamaktadır."],
+              en: ["*Before flight: No change penalty.", "*After flight: 55 USD change penalty.", "**No refund penalty."]
+            }
+          },
+          {
+            id: 43,
+            title: { tr: "PEGASUS DIŞ HAT (PROMOSYON G/P)", en: "PEGASUS INTERNATIONAL (PROMO G/P)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişikliğe izin verilmez.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**İadeye izin verilmez."],
+              en: ["*No changes allowed.", "*No changes within 2h.", "**No refunds allowed."]
+            }
+          },
+          {
+            id: 44,
+            title: { tr: "PEGASUS DIŞ HAT (PROMOSYON U)", en: "PEGASUS INTERNATIONAL (PROMO U)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 40 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**İadeye izin verilmez."],
+              en: ["*2h+ before: 40 EUR change penalty.", "*No changes within 2h.", "**No refunds allowed."]
+            }
+          },
+          {
+            id: 45,
+            title: { tr: "PEGASUS DIŞ HAT (PROMOSYON T)", en: "PEGASUS INTERNATIONAL (PROMO T)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 55 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**İadeye izin verilmez."],
+              en: ["*2h+ before: 55 EUR change penalty.", "*No changes within 2h.", "**No refunds allowed."]
+            }
+          },
+          {
+            id: 46,
+            title: { tr: "PEGASUS DIŞ HAT (STANDART Z/V/X/S)", en: "PEGASUS INTERNATIONAL (STANDARD Z/V/X/S)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 80 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 95 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 80 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 95 EUR refund penalty."]
+            }
+          },
+          {
+            id: 47,
+            title: { tr: "PEGASUS DIŞ HAT (STANDART N/K)", en: "PEGASUS INTERNATIONAL (STANDARD N/K)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 95 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 110 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 95 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 110 EUR refund penalty."]
+            }
+          },
+          {
+            id: 48,
+            title: { tr: "PEGASUS DIŞ HAT (STANDART H)", en: "PEGASUS INTERNATIONAL (STANDARD H)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 110 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 140 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 110 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 140 EUR refund penalty."]
+            }
+          },
+          {
+            id: 49,
+            title: { tr: "PEGASUS DIŞ HAT (STANDART M)", en: "PEGASUS INTERNATIONAL (STANDARD M)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 130 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 165 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 130 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 165 EUR refund penalty."]
+            }
+          },
+          {
+            id: 50,
+            title: { tr: "PEGASUS DIŞ HAT (STANDART L)", en: "PEGASUS INTERNATIONAL (STANDARD L)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 145 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 165 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 145 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 165 EUR refund penalty."]
+            }
+          },
+          {
+            id: 51,
+            title: { tr: "PEGASUS DIŞ HAT (STANDART B)", en: "PEGASUS INTERNATIONAL (STANDARD B)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 165 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 190 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 165 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 190 EUR refund penalty."]
+            }
+          },
+          {
+            id: 52,
+            title: { tr: "PEGASUS DIŞ HAT (STANDART Y)", en: "PEGASUS INTERNATIONAL (STANDARD Y)" },
+            details: {
+              tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 230 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 265 EUR işlem bedeli ile iade yapılır."],
+              en: ["*2h+ before: 230 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 265 EUR refund penalty."]
+            }
+          }
         ];
 
-        let isDarkMode = false;
-        let currentLang = 'tr';
-        let currentSelectedRule = null;
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'tr' ? 'en' : 'tr';
-            updateUI();
-            renderRules();
-            if (currentSelectedRule) openModal(currentSelectedRule);
-        }
-
-        function updateUI() {
-            const t = translations[currentLang];
-            document.getElementById('ui-title').innerText = t.title;
-            document.getElementById('ui-subtitle').innerText = t.subtitle;
-            document.getElementById('searchInput').placeholder = t.search;
-            document.getElementById('stat-1-label').innerText = t.stat1;
-            document.getElementById('stat-1-val').innerText = t.stat1Val;
-            document.getElementById('stat-2-label').innerText = t.stat2;
-            document.getElementById('stat-2-val').innerText = t.stat2Val;
-            document.getElementById('stat-3-label').innerText = t.stat3;
-            document.getElementById('stat-3-val').innerText = t.stat3Val;
-            document.getElementById('langBtn').innerText = currentLang === 'tr' ? 'EN' : 'TR';
-            document.getElementById('langBtnMobile').innerText = currentLang === 'tr' ? 'EN' : 'TR';
-            document.getElementById('modalCloseBtn').innerText = t.close;
-        }
-
-        function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            document.documentElement.classList.toggle('dark');
-            const icon = isDarkMode ? '☀️' : '🌙';
-            document.getElementById('themeBtn').innerText = icon;
-            document.getElementById('themeBtnMobile').innerText = icon;
-        }
-
-        function getAirlineInfo(title) {
-            if (title.includes('THY') || title.includes('TÜRK')) return { name: 'THY', color: 'border-red-200 text-red-700 bg-red-50 dark:bg-red-900/20' };
-            if (title.includes('AJET')) return { name: 'AJet', color: 'border-blue-200 text-blue-700 bg-blue-50 dark:bg-blue-900/20' };
-            if (title.includes('PEGASUS')) return { name: 'Pegasus', color: 'border-yellow-300 text-yellow-800 bg-yellow-50 dark:bg-yellow-900/20' };
-            return { name: 'SunEx', color: 'border-orange-200 text-orange-700 bg-orange-50 dark:bg-orange-950/20' };
-        }
-
-        function renderRules() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const list = document.getElementById('rulesList');
-            list.innerHTML = '';
-            const filtered = flightRules.filter(r => r[currentLang].title.toLowerCase().includes(search));
-            filtered.forEach(rule => {
-                const data = rule[currentLang];
-                const info = getAirlineInfo(data.title);
-                const btn = document.createElement('button');
-                btn.className = 'airline-card w-full bg-white dark:bg-darkCard border border-black/5 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between group text-left';
-                btn.onclick = () => openModal(rule);
-                btn.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl border flex items-center justify-center font-bold text-[10px] ${info.color}">${info.name}</div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-[10px] font-bold text-gray-400 dark:text-gray-500">#${rule.id}</span>
-                                <span class="text-[10px] font-bold text-blue-500 uppercase">${info.name}</span>
-                            </div>
-                            <h3 class="font-medium text-sm md:text-base">${data.title}</h3>
-                        </div>
-                    </div>
-                    <span class="text-gray-300 dark:text-gray-600 group-hover:text-blue-500 transition-all">➔</span>
-                `;
-                list.appendChild(btn);
+        // --- APP ---
+        function App() {
+            const [searchTerm, setSearchTerm] = useState('');
+            const [selectedRule, setSelectedRule] = useState(null);
+            const [copied, setCopied] = useState(false);
+            const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'tr');
+            const [isDarkMode, setIsDarkMode] = useState(() => {
+                const saved = localStorage.getItem('theme');
+                return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
             });
-        }
 
-        function openModal(rule) {
-            currentSelectedRule = rule;
-            const data = rule[currentLang];
-            const info = getAirlineInfo(data.title);
-            document.getElementById('modalHeaderContent').innerHTML = `
-                <div class="flex items-center gap-3">
-                    <div class="w-14 h-14 rounded-2xl border flex items-center justify-center font-bold text-[11px] ${info.color}">${info.name}</div>
-                    <div>
-                        <span class="text-[10px] font-bold text-blue-500 uppercase">${translations[currentLang].detail} #${rule.id}</span>
-                        <h2 class="text-xl md:text-2xl font-bold leading-tight">${data.title}</h2>
-                    </div>
-                </div>
-            `;
-            document.getElementById('modalBody').innerHTML = `
-                <div class="space-y-4">
-                    ${data.details.map(d => `
-                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border border-black/5 dark:border-white/5">
-                            <div class="mt-2 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></div>
-                            <p class="text-sm md:text-base font-medium">${d}</p>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            document.getElementById('modal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            
-            document.getElementById('copyBtn').onclick = () => {
-                const text = `${data.title}\n\n${data.details.join('\n')}`;
-                navigator.clipboard.writeText(text).then(() => {
-                    const toast = document.getElementById('copyToast');
-                    toast.classList.add('active');
-                    setTimeout(() => toast.classList.remove('active'), 2000);
-                });
+            useEffect(() => {
+                localStorage.setItem('lang', lang);
+            }, [lang]);
+
+            useEffect(() => {
+                const root = window.document.documentElement;
+                if (isDarkMode) {
+                    root.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    root.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                }
+            }, [isDarkMode]);
+
+            const filteredRules = useMemo(() => {
+                return flightRules.filter(rule =>
+                    rule.title[lang].toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    rule.id.toString().includes(searchTerm)
+                );
+            }, [searchTerm, lang]);
+
+            const t = {
+                tr: {
+                    title: "Uçuş Kuralları",
+                    subtitle: "Bilet Değişiklik ve İade Rehberi",
+                    searchPlaceholder: "Havayolu veya kural ara...",
+                    currentData: "Güncel Veri",
+                    classes: "52 Farklı Sınıf",
+                    ruleDetail: "Kural Detayı",
+                    appliedRules: "Uygulanan Kurallar",
+                    disclaimer: "* Bu bilgiler bilgilendirme amaçlıdır. Havayolu güncel kuralları esastır.",
+                    close: "Anladım, Kapat",
+                    noResults: "Sonuç bulunamadı",
+                    copyright: "© 2026 Uçuş Kuralları Rehberi • Tüm Hakları Saklıdır"
+                },
+                en: {
+                    title: "Flight Rules",
+                    subtitle: "Ticket Change and Refund Guide",
+                    searchPlaceholder: "Search airline or rule...",
+                    currentData: "Current Data",
+                    classes: "52 Different Classes",
+                    ruleDetail: "Rule Detail",
+                    appliedRules: "Applied Rules",
+                    disclaimer: "* This information is for guidance only. Current airline rules apply.",
+                    close: "Got it, Close",
+                    noResults: "No results found",
+                    copyright: "© 2026 Flight Rules Guide • All Rights Reserved"
+                }
+            }[lang];
+
+            const getAirlineName = (title) => {
+                const upper = title.toUpperCase();
+                if (upper.includes('THY')) return 'THY';
+                if (upper.includes('AJET')) return 'AJet';
+                if (upper.includes('PEGASUS')) return 'Pegasus';
+                if (upper.includes('SUNEXPRESS')) return 'Sun Express';
+                return lang === 'tr' ? 'Diğer' : 'Other';
             };
+
+            const getAirlineColor = (title) => {
+                const upper = title.toUpperCase();
+                if (upper.includes('THY')) return 'border-red-200 text-red-700 bg-red-50 dark:border-red-900/30 dark:text-red-400 dark:bg-red-950/20';
+                if (upper.includes('AJET')) return 'border-blue-200 text-blue-700 bg-blue-50 dark:border-blue-900/30 dark:text-blue-400 dark:bg-blue-950/20';
+                if (upper.includes('PEGASUS')) return 'border-yellow-300 text-yellow-800 bg-yellow-50 dark:border-yellow-900/30 dark:text-yellow-400 dark:bg-yellow-950/20';
+                if (upper.includes('SUNEXPRESS')) return 'border-orange-200 text-orange-700 bg-orange-50 dark:border-orange-900/30 dark:text-orange-400 dark:bg-orange-950/20';
+                return 'border-gray-200 text-gray-700 bg-gray-50 dark:border-gray-800 dark:text-gray-400 dark:bg-gray-800/20';
+            };
+
+            return (
+                <div className="min-h-screen bg-[#f5f5f5] dark:bg-[#0a0a0a] text-[#1a1a1a] dark:text-[#f5f5f5] transition-colors duration-300">
+                    <header className="sticky top-0 z-30 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-black/5 dark:border-white/5 px-4 py-4 md:px-8">
+                        <div className="max-w-5xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="flex items-center justify-between w-full md:w-auto">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-blue-600 p-2 rounded-xl shadow-lg">
+                                        <i data-lucide="plane" className="w-6 h-6 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h1 className="text-xl font-bold tracking-tight">{t.title}</h1>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">{t.subtitle}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2 md:hidden">
+                                    <button onClick={() => setLang(l => l === 'tr' ? 'en' : 'tr')} className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold uppercase text-xs">{lang}</button>
+                                    <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                                        {isDarkMode ? <i data-lucide="sun" className="w-5 h-5"></i> : <i data-lucide="moon" className="w-5 h-5"></i>}
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="relative group flex-1 md:flex-none">
+                                    <i data-lucide="search" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                                    <input
+                                        type="text"
+                                        placeholder={t.searchPlaceholder}
+                                        className="w-full md:w-80 bg-gray-100 dark:bg-gray-800 border-none rounded-2xl py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-blue-500/20 outline-none dark:text-white"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                </div>
+                                <button onClick={() => setLang(l => l === 'tr' ? 'en' : 'tr')} className="hidden md:flex p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold uppercase text-xs">{lang}</button>
+                                <button onClick={() => setIsDarkMode(!isDarkMode)} className="hidden md:flex p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                                    {isDarkMode ? <i data-lucide="sun" className="w-5 h-5"></i> : <i data-lucide="moon" className="w-5 h-5"></i>}
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="max-w-5xl mx-auto px-4 py-8 md:px-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                            <div className="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <i data-lucide="shield-check" className="w-5 h-5 text-green-600"></i>
+                                    <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">{t.currentData}</span>
+                                </div>
+                                <p className="text-2xl font-light tracking-tight">{t.classes}</p>
+                            </div>
+                            <div className="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <i data-lucide="info" className="w-5 h-5 text-blue-600"></i>
+                                    <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">TR / EN</span>
+                                </div>
+                                <p className="text-2xl font-light tracking-tight">{lang === 'tr' ? 'Çift Dil Desteği' : 'Dual Language Support'}</p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3">
+                            {filteredRules.map((rule) => (
+                                <motion.div
+                                    key={rule.id}
+                                    layoutId={`rule-${rule.id}`}
+                                    onClick={() => setSelectedRule(rule)}
+                                    className="w-full bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 border border-black/5 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between transition-all cursor-pointer group"
+                                >
+                                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                                        <div className={`w-12 h-12 rounded-xl border flex items-center justify-center font-bold text-[10px] text-center px-1 leading-tight ${getAirlineColor(rule.title[lang])}`}>
+                                            {getAirlineName(rule.title[lang])}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 mb-0.5">
+                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">#{rule.id}</span>
+                                                <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">{getAirlineName(rule.title[lang])}</span>
+                                            </div>
+                                            <h3 className="font-medium text-sm md:text-base truncate">{rule.title[lang]}</h3>
+                                        </div>
+                                    </div>
+                                    <i data-lucide="chevron-right" className="w-5 h-5 text-gray-300 group-hover:text-blue-500 transition-all"></i>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </main>
+
+                    <AnimatePresence>
+                        {selectedRule && (
+                            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedRule(null)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                                <motion.div layoutId={`rule-${selectedRule.id}`} className="relative bg-white dark:bg-gray-900 w-full max-w-2xl rounded-[32px] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+                                    <div className="p-6 md:p-10 pb-6 border-b dark:border-white/5 shrink-0 flex justify-between items-start">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center font-bold text-xs text-center px-1 leading-tight ${getAirlineColor(selectedRule.title[lang])}`}>
+                                                {getAirlineName(selectedRule.title[lang])}
+                                            </div>
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t.ruleDetail}</span>
+                                                    <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">#{selectedRule.id}</span>
+                                                </div>
+                                                <h2 className="text-xl md:text-2xl font-bold leading-tight">{selectedRule.title[lang]}</h2>
+                                            </div>
+                                        </div>
+                                        <button onClick={() => setSelectedRule(null)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+                                            <i data-lucide="x" className="w-6 h-6 text-gray-400"></i>
+                                        </button>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto p-6 md:p-10 pt-6">
+                                        <div className="space-y-3">
+                                            {selectedRule.details[lang].map((detail, i) => (
+                                                <div key={i} className="flex items-start gap-4 p-4 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border dark:border-white/5">
+                                                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                                                    <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">{detail}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="p-6 md:p-10 pt-6 border-t dark:border-white/5 shrink-0 bg-white dark:bg-gray-900 text-center">
+                                        <p className="text-xs text-gray-400 mb-4 italic">{t.disclaimer}</p>
+                                        <button onClick={() => setSelectedRule(null)} className="w-full bg-black dark:bg-white text-white dark:text-black px-8 py-3 rounded-2xl font-bold text-sm">{t.close}</button>
+                                    </div>
+                                </motion.div>
+                            </div>
+                        )}
+                    </AnimatePresence>
+
+                    <footer className="max-w-5xl mx-auto px-4 py-12 text-center border-t dark:border-white/5 mt-12">
+                        <p className="text-sm text-gray-400 font-medium uppercase tracking-wide">{t.copyright}</p>
+                    </footer>
+                </div>
+            );
         }
 
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-            currentSelectedRule = null;
-        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
 
-        updateUI();
-        renderRules();
+        // Lucide ikonlarını render sonrası çalıştır
+        setTimeout(() => lucide.createIcons(), 500);
     </script>
 </body>
 </html>
