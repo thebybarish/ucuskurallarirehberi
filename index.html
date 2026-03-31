@@ -4,21 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uçuş Kuralları Rehberi</title>
-    <!-- Kütüphaneler -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease; }
-        .dark { background-color: #0a0a0a; color: #f5f5f5; }
-        ::-webkit-scrollbar { width: 8px; }
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #f5f5f5; margin: 0; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
         .no-select { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
     </style>
     <script>
@@ -27,11 +25,8 @@
             theme: {
                 extend: {
                     colors: {
-                        dark: {
-                            bg: '#0a0a0a',
-                            card: '#121212',
-                            border: 'rgba(255,255,255,0.1)'
-                        }
+                        brand: '#2563eb',
+                        dark: { bg: '#0a0a0a', card: '#111827', border: 'rgba(255,255,255,0.05)' }
                     }
                 }
             }
@@ -45,7 +40,7 @@
         const { useState, useMemo, useEffect } = React;
         const { motion, AnimatePresence } = window.Motion;
 
-        // --- TÜM VERİLER (52 KURAL) ---
+        // --- VERİLER ---
         const flightRules = [
           { id: 1, title: { tr: "THY ECO FLY (U/W/P/V/L/T)", en: "THY ECO FLY (U/W/P/V/L/T)" }, details: { tr: ["*Değişiklik yapılamaz.", "**İadeye izin verilmez.", "***Koltuk seçimi ücretli yapılabilir.", "***Yetişkin yolcu serbest bagaj hakkı 15KG şeklindedir."], en: ["*No changes allowed.", "**No refunds allowed.", "***Seat selection is available for a fee.", "***Adult passenger free baggage allowance is 15KG."] } },
           { id: 2, title: { tr: "THY ECO FLY (Q)", en: "THY ECO FLY (Q)" }, details: { tr: ["*Uçuşa 12 saat ve fazla zaman var ise değişiklikte yön başına 1100 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala değişiklikte yön başına 1350 TL cezalı işlem yapılır.", "*Uçuşa 1 saat kala değişikliğe izin vermez.", "** İadeye izin verilmez.", "***Koltuk seçimi ücretli yapılabilir.", "***Yetişkin yolcu serbest bagaj hakkı 15KG şeklindedir."], en: ["*If 12h+ before flight, 1100 TL penalty per direction for changes.", "*If 1-12h before flight, 1350 TL penalty per direction for changes.", "*No changes within 1h of flight.", "**No refunds allowed.", "***Seat selection for a fee.", "***Baggage allowance 15KG."] } },
@@ -101,30 +96,15 @@
           { id: 52, title: { tr: "PEGASUS DIŞ HAT (STANDART Y)", en: "PEGASUS INTERNATIONAL (STANDARD Y)" }, details: { tr: ["*Uçuşa 2 saat ve 2 saatten fazla süre kala değişiklikte 230 EUR işlem bedeli uygulanır.", "*Uçuşa 2 saatten az süre kala değişikliğe izin verilmez.", "**Uçuşa 12 saat ve 12 saatten fazla süre kala 265 EUR işlem bedeli ile iade yapılır."], en: ["*2h+ before: 230 EUR change penalty.", "*No changes within 2h.", "**12h+ before: 265 EUR refund penalty."] } }
         ];
 
-        // --- UYGULAMA MANTIĞI ---
+        // --- UYGULAMA ---
         function App() {
             const [searchTerm, setSearchTerm] = useState('');
             const [selectedRule, setSelectedRule] = useState(null);
             const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'tr');
-            const [isDarkMode, setIsDarkMode] = useState(() => {
-                const saved = localStorage.getItem('theme');
-                return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            });
 
             useEffect(() => {
                 localStorage.setItem('lang', lang);
             }, [lang]);
-
-            useEffect(() => {
-                const root = window.document.documentElement;
-                if (isDarkMode) {
-                    root.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    root.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                }
-            }, [isDarkMode]);
 
             const filteredRules = useMemo(() => {
                 return flightRules.filter(rule =>
@@ -136,7 +116,7 @@
             const t = {
                 tr: {
                     title: "Uçuş Kuralları",
-                    subtitle: "Bilet Değişiklik ve İade Rehberi",
+                    subtitle: "BİLET DEĞİŞİKLİK VE İADE REHBERİ",
                     searchPlaceholder: "Havayolu veya kural ara...",
                     currentData: "Güncel Veri",
                     classes: "52 Farklı Sınıf",
@@ -149,7 +129,7 @@
                 },
                 en: {
                     title: "Flight Rules",
-                    subtitle: "Ticket Change and Refund Guide",
+                    subtitle: "TICKET CHANGE AND REFUND GUIDE",
                     searchPlaceholder: "Search airline or rule...",
                     currentData: "Current Data",
                     classes: "52 Different Classes",
@@ -173,140 +153,139 @@
 
             const getAirlineColor = (title) => {
                 const upper = title.toUpperCase();
-                if (upper.includes('THY')) return 'border-red-200 text-red-700 bg-red-50 dark:border-red-900/30 dark:text-red-400 dark:bg-red-950/20';
-                if (upper.includes('AJET')) return 'border-blue-200 text-blue-700 bg-blue-50 dark:border-blue-900/30 dark:text-blue-400 dark:bg-blue-950/20';
-                if (upper.includes('PEGASUS')) return 'border-yellow-300 text-yellow-800 bg-yellow-50 dark:border-yellow-900/30 dark:text-yellow-400 dark:bg-yellow-950/20';
-                if (upper.includes('SUNEXPRESS')) return 'border-orange-200 text-orange-700 bg-orange-50 dark:border-orange-900/30 dark:text-orange-400 dark:bg-orange-950/20';
-                return 'border-gray-200 text-gray-700 bg-gray-50 dark:border-gray-800 dark:text-gray-400 dark:bg-gray-800/20';
+                if (upper.includes('THY')) return 'border-red-500/20 text-red-400 bg-red-500/5';
+                if (upper.includes('AJET')) return 'border-blue-500/20 text-blue-400 bg-blue-500/5';
+                if (upper.includes('PEGASUS')) return 'border-yellow-500/20 text-yellow-400 bg-yellow-500/5';
+                if (upper.includes('SUNEXPRESS')) return 'border-orange-500/20 text-orange-400 bg-orange-500/5';
+                return 'border-gray-500/20 text-gray-400 bg-gray-500/5';
             };
 
             return (
-                <div className="min-h-screen bg-[#f5f5f5] dark:bg-[#0a0a0a] text-[#1a1a1a] dark:text-[#f5f5f5] transition-colors duration-300">
-                    <header className="sticky top-0 z-30 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-black/5 dark:border-white/5 px-4 py-4 md:px-8">
-                        <div className="max-w-5xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div className="flex items-center justify-between w-full md:w-auto">
-                                <div className="flex items-center gap-3">
-                                    <div className="bg-blue-600 p-2 rounded-xl shadow-lg">
-                                        <i data-lucide="plane" className="w-6 h-6 text-white"></i>
-                                    </div>
-                                    <div>
-                                        <h1 className="text-xl font-bold tracking-tight">{t.title}</h1>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">{t.subtitle}</p>
-                                    </div>
+                <div className="min-h-screen bg-[#0a0a0a] text-[#f5f5f5] transition-colors duration-300">
+                    {/* HEADER - RESİMDEKİYLE AYNI */}
+                    <header className="sticky top-0 z-30 bg-[#0a0a0a] border-b border-white/5 px-4 py-4 md:px-8">
+                        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-blue-600 p-2.5 rounded-xl shadow-lg shadow-blue-600/20">
+                                    <i data-lucide="plane" className="w-7 h-7 text-white"></i>
                                 </div>
-                                <div className="flex items-center gap-2 md:hidden">
-                                    <button onClick={() => setLang(l => l === 'tr' ? 'en' : 'tr')} className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold uppercase text-xs">{lang}</button>
-                                    <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
-                                        {isDarkMode ? <i data-lucide="sun" className="w-5 h-5"></i> : <i data-lucide="moon" className="w-5 h-5"></i>}
-                                    </button>
+                                <div>
+                                    <h1 className="text-2xl font-extrabold tracking-tight leading-none">{t.title}</h1>
+                                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.15em] mt-1.5">{t.subtitle}</p>
                                 </div>
                             </div>
+                            
                             <div className="flex items-center gap-3">
-                                <div className="relative group flex-1 md:flex-none">
-                                    <i data-lucide="search" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                                <div className="relative hidden md:block">
+                                    <i data-lucide="search" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
                                     <input
                                         type="text"
                                         placeholder={t.searchPlaceholder}
-                                        className="w-full md:w-80 bg-gray-100 dark:bg-gray-800 border-none rounded-2xl py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-blue-500/20 outline-none dark:text-white"
+                                        className="bg-[#1a1f2e] border-none rounded-xl py-3 pl-11 pr-4 text-sm w-80 focus:ring-2 focus:ring-blue-500/20 outline-none text-white placeholder:text-gray-600"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
                                 </div>
-                                <button onClick={() => setLang(l => l === 'tr' ? 'en' : 'tr')} className="hidden md:flex p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold uppercase text-xs">{lang}</button>
-                                <button onClick={() => setIsDarkMode(!isDarkMode)} className="hidden md:flex p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
-                                    {isDarkMode ? <i data-lucide="sun" className="w-5 h-5"></i> : <i data-lucide="moon" className="w-5 h-5"></i>}
+                                <button onClick={() => setLang(l => l === 'tr' ? 'en' : 'tr')} className="bg-[#1a1f2e] px-4 py-3 rounded-xl text-gray-300 font-bold text-xs hover:bg-[#252b3d] transition-colors uppercase tracking-widest">
+                                    {lang}
+                                </button>
+                                <button className="bg-[#1a1f2e] p-3 rounded-xl text-gray-300 hover:bg-[#252b3d] transition-colors">
+                                    <i data-lucide="sun" className="w-5 h-5"></i>
                                 </button>
                             </div>
                         </div>
                     </header>
 
-                    <main className="max-w-5xl mx-auto px-4 py-8 md:px-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                            <div className="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <i data-lucide="shield-check" className="w-5 h-5 text-green-600"></i>
-                                    <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">{t.currentData}</span>
+                    <main className="max-w-6xl mx-auto px-4 py-10 md:px-8">
+                        {/* CARDS - RESİMDEKİYLE AYNI */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                            <div className="bg-[#111827] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <i data-lucide="shield-check" className="w-6 h-6 text-green-500"></i>
+                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">{t.currentData}</span>
                                 </div>
-                                <p className="text-2xl font-light tracking-tight">{t.classes}</p>
+                                <p className="text-4xl font-light tracking-tight text-white">{t.classes}</p>
                             </div>
-                            <div className="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <i data-lucide="info" className="w-5 h-5 text-blue-600"></i>
-                                    <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">TR / EN</span>
+                            <div className="bg-[#111827] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <i data-lucide="info" className="w-6 h-6 text-blue-500"></i>
+                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">TR / EN</span>
                                 </div>
-                                <p className="text-2xl font-light tracking-tight">{lang === 'tr' ? 'Çift Dil Desteği' : 'Dual Language Support'}</p>
+                                <p className="text-4xl font-light tracking-tight text-white">{lang === 'tr' ? 'Çift Dil Desteği' : 'Dual Language Support'}</p>
                             </div>
                         </div>
 
+                        {/* LIST */}
                         <div className="space-y-3">
                             {filteredRules.map((rule) => (
                                 <motion.div
                                     key={rule.id}
                                     layoutId={`rule-${rule.id}`}
                                     onClick={() => setSelectedRule(rule)}
-                                    className="w-full bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 border border-black/5 dark:border-white/5 rounded-2xl p-4 flex items-center justify-between transition-all cursor-pointer group"
+                                    className="w-full bg-[#111827] hover:bg-[#1a2233] border border-white/5 rounded-2xl p-5 flex items-center justify-between transition-all cursor-pointer group"
                                 >
-                                    <div className="flex items-center gap-4 flex-1 min-w-0">
-                                        <div className={`w-12 h-12 rounded-xl border flex items-center justify-center font-bold text-[10px] text-center px-1 leading-tight ${getAirlineColor(rule.title[lang])}`}>
+                                    <div className="flex items-center gap-5 flex-1 min-w-0">
+                                        <div className={`w-14 h-14 rounded-xl border flex items-center justify-center font-black text-[11px] text-center px-1 leading-tight ${getAirlineColor(rule.title[lang])}`}>
                                             {getAirlineName(rule.title[lang])}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2 mb-0.5">
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">#{rule.id}</span>
-                                                <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">{getAirlineName(rule.title[lang])}</span>
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <span className="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em]">#{rule.id}</span>
+                                                <span className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em]">{getAirlineName(rule.title[lang])}</span>
                                             </div>
-                                            <h3 className="font-medium text-sm md:text-base truncate">{rule.title[lang]}</h3>
+                                            <h3 className="font-semibold text-base md:text-lg truncate text-gray-200">{rule.title[lang]}</h3>
                                         </div>
                                     </div>
-                                    <i data-lucide="chevron-right" className="w-5 h-5 text-gray-300 group-hover:text-blue-500 transition-all"></i>
+                                    <i data-lucide="chevron-right" className="w-6 h-6 text-gray-700 group-hover:text-blue-500 transition-all"></i>
                                 </motion.div>
                             ))}
                         </div>
                     </main>
 
+                    {/* MODAL */}
                     <AnimatePresence>
                         {selectedRule && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedRule(null)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-                                <motion.div layoutId={`rule-${selectedRule.id}`} className="relative bg-white dark:bg-gray-900 w-full max-w-2xl rounded-[32px] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
-                                    <div className="p-6 md:p-10 pb-6 border-b dark:border-white/5 shrink-0 flex justify-between items-start">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center font-bold text-xs text-center px-1 leading-tight ${getAirlineColor(selectedRule.title[lang])}`}>
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedRule(null)} className="absolute inset-0 bg-black/80 backdrop-blur-md" />
+                                <motion.div layoutId={`rule-${selectedRule.id}`} className="relative bg-[#0f172a] w-full max-w-2xl rounded-[2.5rem] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden border border-white/10">
+                                    <div className="p-8 md:p-12 pb-6 border-b border-white/5 shrink-0 flex justify-between items-start">
+                                        <div className="flex items-center gap-5">
+                                            <div className={`w-16 h-16 rounded-2xl border flex items-center justify-center font-black text-xs text-center px-1 leading-tight ${getAirlineColor(selectedRule.title[lang])}`}>
                                                 {getAirlineName(selectedRule.title[lang])}
                                             </div>
                                             <div>
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t.ruleDetail}</span>
-                                                    <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">#{selectedRule.id}</span>
+                                                <div className="flex items-center gap-3 mb-1.5">
+                                                    <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">{t.ruleDetail}</span>
+                                                    <span className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em]">#{selectedRule.id}</span>
                                                 </div>
-                                                <h2 className="text-xl md:text-2xl font-bold leading-tight">{selectedRule.title[lang]}</h2>
+                                                <h2 className="text-2xl md:text-3xl font-bold leading-tight text-white">{selectedRule.title[lang]}</h2>
                                             </div>
                                         </div>
-                                        <button onClick={() => setSelectedRule(null)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
-                                            <i data-lucide="x" className="w-6 h-6 text-gray-400"></i>
+                                        <button onClick={() => setSelectedRule(null)} className="p-2 hover:bg-white/5 rounded-full transition-colors">
+                                            <i data-lucide="x" className="w-7 h-7 text-gray-500"></i>
                                         </button>
                                     </div>
-                                    <div className="flex-1 overflow-y-auto p-6 md:p-10 pt-6">
-                                        <div className="space-y-3">
+                                    <div className="flex-1 overflow-y-auto p-8 md:p-12 pt-8">
+                                        <div className="space-y-4">
                                             {selectedRule.details[lang].map((detail, i) => (
-                                                <div key={i} className="flex items-start gap-4 p-4 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border dark:border-white/5">
-                                                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
-                                                    <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">{detail}</p>
+                                                <div key={i} className="flex items-start gap-5 p-5 rounded-2xl bg-white/5 border border-white/5">
+                                                    <div className="mt-2 w-2 h-2 rounded-full bg-blue-500 shrink-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+                                                    <p className="text-base md:text-lg text-gray-300 leading-relaxed font-medium">{detail}</p>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="p-6 md:p-10 pt-6 border-t dark:border-white/5 shrink-0 bg-white dark:bg-gray-900 text-center">
-                                        <p className="text-xs text-gray-400 mb-4 italic">{t.disclaimer}</p>
-                                        <button onClick={() => setSelectedRule(null)} className="w-full bg-black dark:bg-white text-white dark:text-black px-8 py-3 rounded-2xl font-bold text-sm">{t.close}</button>
+                                    <div className="p-8 md:p-12 pt-6 border-t border-white/5 shrink-0 bg-[#0f172a] text-center">
+                                        <p className="text-xs text-gray-500 mb-6 italic font-medium">{t.disclaimer}</p>
+                                        <button onClick={() => setSelectedRule(null)} className="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-lg shadow-blue-600/20">{t.close}</button>
                                     </div>
                                 </motion.div>
                             </div>
                         )}
                     </AnimatePresence>
 
-                    <footer className="max-w-5xl mx-auto px-4 py-12 text-center border-t dark:border-white/5 mt-12">
-                        <p className="text-sm text-gray-400 font-medium uppercase tracking-wide">{t.copyright}</p>
+                    <footer className="max-w-6xl mx-auto px-4 py-16 text-center border-t border-white/5 mt-12">
+                        <p className="text-xs text-gray-600 font-black uppercase tracking-[0.3em]">{t.copyright}</p>
                     </footer>
                 </div>
             );
