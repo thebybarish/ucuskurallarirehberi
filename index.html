@@ -13,11 +13,11 @@
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #f5f5f5; margin: 0; }
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; margin: 0; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #333; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
         .no-select { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
     </style>
     <script>
@@ -40,7 +40,7 @@
         const { useState, useMemo, useEffect } = React;
         const { motion, AnimatePresence } = window.Motion;
 
-        // --- TÜM VERİLER (52 KURAL) ---
+        // --- VERİLER (52 KURAL) ---
         const flightRules = [
           { id: 1, title: { tr: "THY ECO FLY (U/W/P/V/L/T)", en: "THY ECO FLY (U/W/P/V/L/T)" }, details: { tr: ["*Değişiklik yapılamaz.", "**İadeye izin verilmez.", "***Koltuk seçimi ücretli yapılabilir.", "***Yetişkin yolcu serbest bagaj hakkı 15KG şeklindedir."], en: ["*No changes allowed.", "**No refunds allowed.", "***Seat selection is available for a fee.", "***Adult passenger free baggage allowance is 15KG."] } },
           { id: 2, title: { tr: "THY ECO FLY (Q)", en: "THY ECO FLY (Q)" }, details: { tr: ["*Uçuşa 12 saat ve fazla zaman var ise değişiklikte yön başına 1100 TL cezalı işlem yapılır.", "*Uçuşa 1-12 saat kala değişiklikte yön başına 1350 TL cezalı işlem yapılır.", "*Uçuşa 1 saat kala değişikliğe izin vermez.", "** İadeye izin verilmez.", "***Koltuk seçimi ücretli yapılabilir.", "***Yetişkin yolcu serbest bagaj hakkı 15KG şeklindedir."], en: ["*If 12h+ before flight, 1100 TL penalty per direction for changes.", "*If 1-12h before flight, 1350 TL penalty per direction for changes.", "*No changes within 1h of flight.", "**No refunds allowed.", "***Seat selection for a fee.", "***Baggage allowance 15KG."] } },
@@ -101,11 +101,26 @@
             const [searchTerm, setSearchTerm] = useState('');
             const [selectedRule, setSelectedRule] = useState(null);
             const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'tr');
+            const [isDarkMode, setIsDarkMode] = useState(() => {
+                const saved = localStorage.getItem('theme');
+                return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            });
             const [copied, setCopied] = useState(false);
 
             useEffect(() => {
                 localStorage.setItem('lang', lang);
             }, [lang]);
+
+            useEffect(() => {
+                const root = window.document.documentElement;
+                if (isDarkMode) {
+                    root.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    root.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                }
+            }, [isDarkMode]);
 
             const filteredRules = useMemo(() => {
                 return flightRules.filter(rule =>
@@ -176,9 +191,9 @@
             };
 
             return (
-                <div className="min-h-screen bg-[#050505] text-[#f5f5f5] transition-colors duration-300">
+                <div className="min-h-screen bg-white dark:bg-[#050505] text-[#1a1a1a] dark:text-[#f5f5f5] transition-colors duration-300">
                     {/* HEADER - RESİMDEKİYLE BİREBİR */}
-                    <header className="sticky top-0 z-30 bg-[#050505] border-b border-white/5 px-4 py-4 md:px-8">
+                    <header className="sticky top-0 z-30 bg-white dark:bg-[#050505] border-b border-black/5 dark:border-white/5 px-4 py-4 md:px-8">
                         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
                             <div className="flex items-center gap-4">
                                 <div className="bg-blue-600 p-2.5 rounded-xl shadow-lg shadow-blue-600/20">
@@ -196,17 +211,17 @@
                                     <input
                                         type="text"
                                         placeholder={t.searchPlaceholder}
-                                        className="bg-[#1a1f2e] border-none rounded-xl py-3 pl-11 pr-4 text-sm w-80 focus:ring-2 focus:ring-blue-500/20 outline-none text-white placeholder:text-gray-600"
+                                        className="bg-gray-100 dark:bg-[#1a1f2e] border-none rounded-xl py-3 pl-11 pr-4 text-sm w-80 focus:ring-2 focus:ring-blue-500/20 outline-none dark:text-white placeholder:text-gray-500"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
                                 </div>
-                                <button onClick={() => setLang(l => l === 'tr' ? 'en' : 'tr')} className="bg-[#1a1f2e] px-4 py-3 rounded-xl text-gray-300 font-bold text-xs hover:bg-[#252b3d] transition-colors flex items-center gap-2">
+                                <button onClick={() => setLang(l => l === 'tr' ? 'en' : 'tr')} className="bg-gray-100 dark:bg-[#1a1f2e] px-4 py-3 rounded-xl text-gray-600 dark:text-gray-300 font-bold text-xs hover:bg-gray-200 dark:hover:bg-[#252b3d] transition-colors flex items-center gap-2 uppercase tracking-widest">
                                     <i data-lucide="languages" className="w-4 h-4"></i>
-                                    {lang.toUpperCase()}
+                                    {lang}
                                 </button>
-                                <button className="bg-[#1a1f2e] p-3 rounded-xl text-gray-300 hover:bg-[#252b3d] transition-colors">
-                                    <i data-lucide="sun" className="w-5 h-5"></i>
+                                <button onClick={() => setIsDarkMode(!isDarkMode)} className="bg-gray-100 dark:bg-[#1a1f2e] p-3 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#252b3d] transition-colors">
+                                    {isDarkMode ? <i data-lucide="sun" className="w-5 h-5"></i> : <i data-lucide="moon" className="w-5 h-5"></i>}
                                 </button>
                             </div>
                         </div>
@@ -215,32 +230,32 @@
                     <main className="max-w-6xl mx-auto px-4 py-10 md:px-8">
                         {/* 3'LÜ KART YAPISI - RESİMDEKİYLE BİREBİR */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                            <div className="bg-[#0f172a] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
+                            <div className="bg-gray-50 dark:bg-[#0f172a] p-8 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-xl">
                                 <div className="flex items-center gap-3 mb-4">
                                     <div className="bg-green-500/10 p-2 rounded-lg">
                                         <i data-lucide="shield-check" className="w-6 h-6 text-green-500"></i>
                                     </div>
-                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">{t.card1Label}</span>
+                                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t.card1Label}</span>
                                 </div>
-                                <p className="text-4xl font-light tracking-tight text-white">{t.card1Value}</p>
+                                <p className="text-4xl font-light tracking-tight dark:text-white">{t.card1Value}</p>
                             </div>
-                            <div className="bg-[#0f172a] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
+                            <div className="bg-gray-50 dark:bg-[#0f172a] p-8 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-xl">
                                 <div className="flex items-center gap-3 mb-4">
                                     <div className="bg-blue-500/10 p-2 rounded-lg">
                                         <i data-lucide="clock" className="w-6 h-6 text-blue-500"></i>
                                     </div>
-                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">{t.card2Label}</span>
+                                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t.card2Label}</span>
                                 </div>
-                                <p className="text-4xl font-light tracking-tight text-white">{t.card2Value}</p>
+                                <p className="text-4xl font-light tracking-tight dark:text-white">{t.card2Value}</p>
                             </div>
-                            <div className="bg-[#0f172a] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
+                            <div className="bg-gray-50 dark:bg-[#0f172a] p-8 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-xl">
                                 <div className="flex items-center gap-3 mb-4">
                                     <div className="bg-purple-500/10 p-2 rounded-lg">
                                         <i data-lucide="credit-card" className="w-6 h-6 text-purple-500"></i>
                                     </div>
-                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">{t.card3Label}</span>
+                                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t.card3Label}</span>
                                 </div>
-                                <p className="text-4xl font-light tracking-tight text-white">{t.card3Value}</p>
+                                <p className="text-4xl font-light tracking-tight dark:text-white">{t.card3Value}</p>
                             </div>
                         </div>
 
@@ -251,7 +266,7 @@
                                     key={rule.id}
                                     layoutId={`rule-${rule.id}`}
                                     onClick={() => setSelectedRule(rule)}
-                                    className="w-full bg-[#0f172a] hover:bg-[#1a2233] border border-white/5 rounded-2xl p-5 flex items-center justify-between transition-all cursor-pointer group"
+                                    className="w-full bg-white dark:bg-[#0f172a] hover:bg-gray-50 dark:hover:bg-[#1a2233] border border-black/5 dark:border-white/5 rounded-2xl p-5 flex items-center justify-between transition-all cursor-pointer group shadow-sm"
                                 >
                                     <div className="flex items-center gap-5 flex-1 min-w-0">
                                         <div className={`w-14 h-14 rounded-xl border flex items-center justify-center font-black text-[11px] text-center px-1 leading-tight ${getAirlineColor(rule.title[lang])}`}>
@@ -259,13 +274,13 @@
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-3 mb-1">
-                                                <span className="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em]">#{rule.id}</span>
+                                                <span className="text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-[0.2em]">#{rule.id}</span>
                                                 <span className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em]">{getAirlineName(rule.title[lang])}</span>
                                             </div>
-                                            <h3 className="font-semibold text-base md:text-lg truncate text-gray-200">{rule.title[lang]}</h3>
+                                            <h3 className="font-semibold text-base md:text-lg truncate dark:text-gray-200">{rule.title[lang]}</h3>
                                         </div>
                                     </div>
-                                    <i data-lucide="chevron-right" className="w-6 h-6 text-gray-700 group-hover:text-blue-500 transition-all"></i>
+                                    <i data-lucide="chevron-right" className="w-6 h-6 text-gray-300 dark:text-gray-700 group-hover:text-blue-500 transition-all"></i>
                                 </motion.div>
                             ))}
                         </div>
@@ -276,40 +291,40 @@
                         {selectedRule && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedRule(null)} className="absolute inset-0 bg-black/80 backdrop-blur-md" />
-                                <motion.div layoutId={`rule-${selectedRule.id}`} className="relative bg-[#0f172a] w-full max-w-2xl rounded-[2.5rem] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden border border-white/10">
-                                    <div className="p-8 md:p-12 pb-6 border-b border-white/5 shrink-0 flex justify-between items-start">
+                                <motion.div layoutId={`rule-${selectedRule.id}`} className="relative bg-white dark:bg-[#0f172a] w-full max-w-2xl rounded-[2.5rem] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden border border-black/5 dark:border-white/10">
+                                    <div className="p-8 md:p-12 pb-6 border-b border-black/5 dark:border-white/5 shrink-0 flex justify-between items-start">
                                         <div className="flex items-center gap-5">
                                             <div className={`w-16 h-16 rounded-2xl border flex items-center justify-center font-black text-xs text-center px-1 leading-tight ${getAirlineColor(selectedRule.title[lang])}`}>
                                                 {getAirlineName(selectedRule.title[lang])}
                                             </div>
                                             <div>
                                                 <div className="flex items-center gap-3 mb-1.5">
-                                                    <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">{t.ruleDetail}</span>
+                                                    <span className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">{t.ruleDetail}</span>
                                                     <span className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em]">#{selectedRule.id}</span>
                                                 </div>
-                                                <h2 className="text-2xl md:text-3xl font-bold leading-tight text-white">{selectedRule.title[lang]}</h2>
+                                                <h2 className="text-2xl md:text-3xl font-bold leading-tight dark:text-white">{selectedRule.title[lang]}</h2>
                                             </div>
                                         </div>
-                                        <button onClick={() => setSelectedRule(null)} className="p-2 hover:bg-white/5 rounded-full transition-colors">
-                                            <i data-lucide="x" className="w-7 h-7 text-gray-500"></i>
+                                        <button onClick={() => setSelectedRule(null)} className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors">
+                                            <i data-lucide="x" className="w-7 h-7 text-gray-400"></i>
                                         </button>
                                     </div>
                                     <div className="flex-1 overflow-y-auto p-8 md:p-12 pt-8">
                                         <div className="space-y-4">
                                             {selectedRule.details[lang].map((detail, i) => (
-                                                <div key={i} className="flex items-start gap-5 p-5 rounded-2xl bg-white/5 border border-white/5">
+                                                <div key={i} className="flex items-start gap-5 p-5 rounded-2xl bg-gray-50 dark:bg-white/5 border border-black/5 dark:border-white/5">
                                                     <div className="mt-2 w-2 h-2 rounded-full bg-blue-500 shrink-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
-                                                    <p className="text-base md:text-lg text-gray-300 leading-relaxed font-medium">{detail}</p>
+                                                    <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed font-medium">{detail}</p>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="p-8 md:p-12 pt-6 border-t border-white/5 shrink-0 bg-[#0f172a] text-center">
-                                        <p className="text-xs text-gray-500 mb-6 italic font-medium">{t.disclaimer}</p>
+                                    <div className="p-8 md:p-12 pt-6 border-t border-black/5 dark:border-white/5 shrink-0 bg-white dark:bg-[#0f172a] text-center">
+                                        <p className="text-xs text-gray-400 dark:text-gray-500 mb-6 italic font-medium">{t.disclaimer}</p>
                                         <div className="flex flex-col md:flex-row gap-4">
                                             <button 
                                                 onClick={() => copyToClipboard(selectedRule.details[lang].join('\n'))}
-                                                className="flex-1 bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3"
+                                                className="flex-1 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-800 dark:text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3"
                                             >
                                                 <i data-lucide={copied ? "check" : "copy"} className={`w-5 h-5 ${copied ? "text-green-500" : ""}`}></i>
                                                 {copied ? t.copied : t.copy}
@@ -324,8 +339,8 @@
                         )}
                     </AnimatePresence>
 
-                    <footer className="max-w-6xl mx-auto px-4 py-16 text-center border-t border-white/5 mt-12">
-                        <p className="text-xs text-gray-600 font-black uppercase tracking-[0.3em]">{t.copyright}</p>
+                    <footer className="max-w-6xl mx-auto px-4 py-16 text-center border-t border-black/5 dark:border-white/5 mt-12">
+                        <p className="text-xs text-gray-400 dark:text-gray-600 font-black uppercase tracking-[0.3em]">{t.copyright}</p>
                     </footer>
                 </div>
             );
